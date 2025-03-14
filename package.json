@@ -1,0 +1,15 @@
+{
+  "name": "poko-capsule-website",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
+    "@11ty/eleventy-plugin-directory-output": "^1.0.1",
+    "@types/bun": "latest",
+    "dayjs": "^1.11.13"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  }
+}

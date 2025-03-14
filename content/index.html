@@ -1,0 +1,23 @@
+---
+title: "TITLE"
+variable: "TEST 1/ou 2// - et 3"
+---
+
+<!doctype html>
+<html lang="{{lang or 'en'}}" class="no-js">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="{{ eleventy.generator }}" />
+
+        <!-- prettier-ignore -->
+        <script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
+
+        <title>{{ title }}</title>
+    </head>
+    <body>
+        <p>{{variable}}</p>
+        <p>{{ variable | slugify }}</p>
+        <p>{{ variable | slugifyPath }}</p>
+    </body>
+</html>
