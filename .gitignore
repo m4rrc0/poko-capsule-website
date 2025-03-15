@@ -6,6 +6,7 @@ out
 dist
 *.tgz
 _site
+.next
 
 # code coverage
 coverage
