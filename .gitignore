@@ -6,9 +6,8 @@ out
 dist
 *.tgz
 _site
-.next
-.astro
-.wrangler
+_output
+public
 
 # code coverage
 coverage
@@ -30,6 +29,10 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .eslintcache
 .cache
 *.tsbuildinfo
+.next
+.astro
+.wrangler
+.netlify
 
 # IntelliJ based IDEs
 .idea

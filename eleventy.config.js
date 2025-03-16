@@ -18,7 +18,8 @@ export const config = {
     // includes: "../_includes",
     includes: "",
     // data: "_data", // Directory for global data files. Default: "_data"
-    output: "dist",
+    // output: "dist",
+    output: "public",
   },
   templateFormats: ["md", "njk", "html", "11ty.js"],
   markdownTemplateEngine: "njk",
