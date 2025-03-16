@@ -4,34 +4,43 @@
   "type": "module",
   "private": true,
   "dependencies": {
-    "@markdoc/markdoc": "^0.4.0",
-    "next": "^15.1.6",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "@astrojs/cloudflare": "^12.2.4",
+    "@astrojs/markdoc": "^0.12.9",
+    "@astrojs/react": "^4.2.0",
+    "@keystatic/astro": "^5.0.6",
     "@keystatic/core": "^0.5.46",
-    "@keystatic/next": "^5.0.4"
+    "@types/react": "^19.0.8",
+    "@types/react-dom": "^19.0.3",
+    "astro": "^5.2.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.0.0",
     "@11ty/eleventy-plugin-directory-output": "^1.0.1",
     "@types/bun": "latest",
-    "@types/react": "^19.0.8",
     "concurrently": "^9.1.2",
     "dayjs": "^1.11.13",
-    "typescript": "^5.5.3"
-  },
-  "peerDependencies": {
-    "typescript": "^5"
+    "typescript": "^5.5.3",
+    "wrangler": "^4.0.0"
   },
   "scripts": {
-    "build:cms": "next build",
-    "dev:cms": "next dev",
-    "start:cms": "next start",
-    "preview:cms": "next start",
-    "dev": "concurrently \"eleventy --serve\" \"bun run dev:cms\"",
+    "CMS": "------------CMS------------",
+    "dev:cms": "astro dev",
+    "start:cms": "astro dev",
+    "build:cms": "astro build",
+    "preview:cms": "astro preview",
+    "preview:wrangler:cms": "wrangler pages dev ./dist",
+    "astro": "astro",
+    "SITE": "------------SITE------------",
+    "dev:site": "eleventy --serve",
+    "start:site": "eleventy --serve",
+    "build:site": "eleventy",
+    "preview:site": "eleventy-dev-server --dir=dist",
+    "GLOBAL": "------------GLOBAL------------",
+    "dev": "concurrently \"bun run dev:site\" \"bun run dev:cms\"",
     "start": "bun run dev",
-    "build": "concurrently \"eleventy\" \"bun run build:cms\"",
-    "preview:11ty": "eleventy-dev-server --dir=dist",
-    "preview": "concurrently \"bun run preview:11ty\" \"bun run preview:cms\""
+    "build": "concurrently \"bun run build:site\" \"bun run build:cms\"",
+    "preview": "concurrently \"bun run preview:site\" \"bun run preview:cms\""
   }
 }

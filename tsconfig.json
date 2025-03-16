@@ -1,22 +1,23 @@
 {
+  "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
     // Environment setup & latest features
-    // "lib": ["esnext"],
-    // "target": "ESNext",
-    // "module": "ESNext",
+    "lib": ["esnext"],
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleDetection": "force",
-    // "jsx": "react-jsx",
-    // "allowJs": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
 
     // Bundler mode
-    // "moduleResolution": "bundler",
+    "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
     "verbatimModuleSyntax": true,
-    // "noEmit": true,
+    "noEmit": true,
 
     // Best practices
-    // "strict": true,
-    // "skipLibCheck": true,
+    "strict": true,
+    "skipLibCheck": true,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedIndexedAccess": true,
 
@@ -25,30 +26,7 @@
     "noUnusedParameters": false,
     "noPropertyAccessFromIndexSignature": false,
 
-    // Next.js
-    "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": false,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "incremental": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "downlevelIteration": true,
-    "jsx": "preserve",
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "strictNullChecks": true
-  },
-  // Also Next.js
-  "include": ["next-env.d.ts", ".next/types/**/*.ts", "**/*.ts", "**/*.tsx"],
-  "exclude": ["node_modules"]
+    // Astro recommended
+    "jsxImportSource": "react"
+  }
 }
