@@ -1,0 +1,9 @@
+{
+  "name": "poko-capsule-website",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2025-03-10",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+  "send_metrics": true
+}

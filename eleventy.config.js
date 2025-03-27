@@ -1,4 +1,5 @@
 import directoryOutputPlugin from "@11ty/eleventy-plugin-directory-output";
+import pluginMarkdoc from "@m4rrc0/eleventy-plugin-markdoc";
 
 // IMPORT CONFIG
 import {
@@ -18,12 +19,13 @@ export const config = {
     // includes: "../_includes",
     includes: "",
     // data: "_data", // Directory for global data files. Default: "_data"
-    // output: "dist",
-    output: "public",
+    // output: "public",
+    output: "dist", // TODO: should it output to public on build?
   },
   templateFormats: ["md", "njk", "html", "11ty.js"],
   markdownTemplateEngine: "njk",
   htmlTemplateEngine: "njk",
+  // htmlTemplateEngine: "mdoc",
 };
 
 export default async function (eleventyConfig) {
@@ -31,6 +33,7 @@ export default async function (eleventyConfig) {
   eleventyConfig.addWatchTarget("./src/config-11ty/", { resetConfig: true,  }); // NOTE: watching works but changes does not properly rerender...
 
   eleventyConfig.addPlugin(directoryOutputPlugin);
+  eleventyConfig.addPlugin(pluginMarkdoc);
 
   // --------------------- Filters
   eleventyConfig.addFilter("toIsoString", toISOString);
