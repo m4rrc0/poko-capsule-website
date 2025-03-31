@@ -5,11 +5,14 @@ import keystatic from "@keystatic/astro";
 import cloudflare from "@astrojs/cloudflare";
 import netlify from "@astrojs/netlify";
 import vercel from "@astrojs/vercel";
+import node from '@astrojs/node';
 import { LOCAL_BUILD, PREFERRED_HOSTING, NETLIFY_BUILD, CLOUDFLARE_BUILD, VERCEL_BUILD } from "./astro.config.env";
 
 const cloudflareOptions = {
   platformProxy: { enabled: true, configPath: 'wrangler.jsonc', experimentalJsonConfig: true }
 }
+
+const nodeOptions = { mode: 'standalone' }
 
 // NOTE: Cloudflare workaround for Error:
 // `Failed to publish your Function. Got error: Uncaught ReferenceError: MessageChannel is not defined`
@@ -25,8 +28,13 @@ const cloudflareViteConfig = {
   },
 }
 
+const adapterConfig = {
+  ...((LOCAL_BUILD && PREFERRED_HOSTING === 'cloudflare' && cloudflareOptions) || {}),
+  ...((LOCAL_BUILD && PREFERRED_HOSTING === 'node' && nodeOptions) || {}),
+}
+
 const adapter = LOCAL_BUILD
-  ? { netlify, cloudflare, vercel }[PREFERRED_HOSTING]()
+  ? { netlify, cloudflare, vercel, node }[PREFERRED_HOSTING](adapterConfig)
   : (NETLIFY_BUILD && netlify()) ||
   (CLOUDFLARE_BUILD && cloudflare(cloudflareOptions)) ||
   (VERCEL_BUILD && vercel());
