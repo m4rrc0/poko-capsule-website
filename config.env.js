@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import packageJson from './package.json';
+import packageJson from './package.json' with { type: "json" };
 
 const processEnv = typeof process !== 'undefined' ? process.env : {};
 
@@ -9,6 +9,18 @@ const fallbackRepoUrlParts = fallbackRepoUrl?.replace('.git', '').split(':')?.po
 const fallbackRepoName = fallbackRepoUrlParts?.pop();
 const fallbackRepoOwner = fallbackRepoUrlParts?.pop();
 const fallbackRepo = `${fallbackRepoOwner}/${fallbackRepoName}`;
+
+// PUBLIC_CONTENT_DIR
+export const PUBLIC_CONTENT_DIR = processEnv.PUBLIC_CONTENT_DIR || 'content';
+// PUBLIC_WORKING_DIR
+export const PUBLIC_WORKING_DIR = processEnv.PUBLIC_WORKING_DIR || PUBLIC_CONTENT_DIR || 'content';
+// Only keep the last child directory
+export const PUBLIC_WORKING_SUBDIR = PUBLIC_WORKING_DIR.split('/').pop();
+// POKO_THEME
+export const POKO_THEME = processEnv.POKO_THEME || 'default';
+// PUBLIC_USER_DIR
+export const PUBLIC_USER_DIR = processEnv.PUBLIC_USER_DIR || `_user-content`;
+
 
 // Detect the current hosting provider used
 export const NETLIFY_BUILD = Boolean(processEnv.NETLIFY || processEnv.NETLIFY_DEPLOYMENT_ID);

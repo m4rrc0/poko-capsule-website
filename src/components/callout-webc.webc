@@ -1,0 +1,4 @@
+<div class="callout-webc" style="border: 1px solid #ccc; padding-inline: 1rem;" :data-title="title">
+    <p><strong @text="title"></strong></p>
+    <slot>Fallback slot content</slot>
+</div>

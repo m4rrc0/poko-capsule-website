@@ -1,4 +1,5 @@
 # dependencies (bun install)
+**/node_modules/**
 node_modules
 
 # output
@@ -8,11 +9,6 @@ dist
 _site
 _output
 public
-
-# Mock content
-# .content
-# _content
-# mock-content
 
 # code coverage
 coverage

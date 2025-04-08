@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="{{lang or 'en'}}" class="no-js">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="generator" content="{{ eleventy.generator }}" />
+
+        <!-- prettier-ignore -->
+        <script>(function(H){H.className=H.className.replace(/\bno-js\b/,'js')})(document.documentElement)</script>
+
+        <!-- Metadata -->
+        <title>{{ metadata.title }}</title>
+        {% if metadata.description %}
+            <meta name="description" content="{{ metadata.description }}">
+        {% endif %}
+        {% if metadata.image %}
+            <meta name="image" content="{{ metadata.image }}">
+        {% endif %}
+
+        <!-- User HTML head injection -->
+        {{ globalSettings.htmlHead | safe }}
+    </head>
+    <body>
+        {% if collections.all | eleventyNavigation | length %}
+        <header>
+            <nav>
+                {{ collections.all | eleventyNavigation | eleventyNavigationToHtml | safe }}
+            </nav>
+        </header>
+        {% endif %}
+
+        {{ content | safe }}
+    </body>
+</html>

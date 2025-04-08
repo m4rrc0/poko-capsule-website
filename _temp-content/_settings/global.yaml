@@ -1,0 +1,6 @@
+siteName: poko
+htmlHead: >-
+  <link rel="stylesheet"
+  href="https://cdn.jsdelivr.net/gh/kimeiga/bahunya/dist/bahunya.min.css">
+contentTypes:
+  - articles
