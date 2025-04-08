@@ -8,7 +8,7 @@ export default {
         if (typeof data.permalink === 'boolean' && !data.permalink) {
             return false;
         }
-        if (typeof data.permalink === 'string') {
+        if (typeof data.permalink === 'string' && data.permalink !== '') {
             // TODO: I just want to detect if this happens
             console.log({permalink: data.permalink})
         }
