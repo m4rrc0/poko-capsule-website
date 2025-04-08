@@ -53,8 +53,6 @@ try {
   
   if (globalSettingsYaml) {
     globalSettings = yaml.load(globalSettingsYaml);
-    import.meta.env.PUBLIC_TEST = 'blou';
-    import.meta.env.PUBLIC_GLOBAL_SETTINGS = globalSettings;
     consoleInfo(`Global settings loaded successfully for ${globalSettings?.siteName}`);
   } else {
     consoleInfo('Global settings file not found, skipping...');
@@ -84,6 +82,9 @@ const viteConfig = {
   //     ]
   //   }
   // },
+  define: {
+    'import.meta.env.PUBLIC_GLOBAL_SETTINGS': JSON.stringify(globalSettings || {}),
+  },
   ...((LOCAL_BUILD && PREFERRED_HOSTING === 'cloudflare') || CLOUDFLARE_BUILD) ? cloudflareViteConfig : {}
 }
   
