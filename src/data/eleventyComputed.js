@@ -5,6 +5,13 @@ import { PUBLIC_USER_DIR } from '../../config.env.js';
 export default {
     // ...temp,
     permalink: (data) => {
+        if (typeof data.permalink === 'boolean' && !data.permalink) {
+            return false;
+        }
+        if (typeof data.permalink === 'string') {
+            // TODO: I just want to detect if this happens
+            console.log({permalink: data.permalink})
+        }
         const filePathStem = data.page.filePathStem
             .replace(/^\/pages/, '')
             .replace(new RegExp(`^\/${PUBLIC_USER_DIR}`), '')

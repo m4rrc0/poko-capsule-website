@@ -13,7 +13,7 @@ import populateInputDir from './src/config-11ty/plugins/populateInputDir/index.j
 import { PUBLIC_CONTENT_DIR } from './config.env.js'
 import { div, callout, calloutShortcode } from './src/config-markdoc/tags-examples.js';
 import eleventyComputed from './src/data/eleventyComputed.js';
-// import { consoleInfo, loadFiles } from './src/utils/build.js';
+import { consoleInfo } from './src/utils/build.js';
 // Eleventy Config
 import {
   toISOString,
@@ -52,8 +52,13 @@ export default async function (eleventyConfig) {
   eleventyConfig.setUseGitIgnore(false);
 
   // --------------------- Read user config
-  const globalSettingsYaml = await fs.readFile(`${PUBLIC_CONTENT_DIR}/_settings/global.yaml`, 'utf8');
-  const globalSettings = yaml.load(globalSettingsYaml);
+  let globalSettings = {};
+  try {
+    const globalSettingsYaml = await fs.readFile(`${PUBLIC_CONTENT_DIR}/_settings/global.yaml`, 'utf8');
+    globalSettings = yaml.load(globalSettingsYaml);
+  } catch (e) {
+    consoleInfo(`No global settings found at '${PUBLIC_CONTENT_DIR}/_settings/global.yaml'`);
+  }
 
       // --------------------- Read user config
   // const globalSettingsYaml = await readFirstExistingFile([
