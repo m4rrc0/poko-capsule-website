@@ -2,9 +2,7 @@ import { config, fields, collection, type LocalConfig, type GitHubConfig, single
 import { wrapper, block, inline, mark, repeating } from '@keystatic/core/content-components'
 // export const markdocConfig = fields.markdoc.createMarkdocConfig({});
 
-import process from "node:process";
-
-console.log({ importMetaEnv: import.meta.env, processEnv: process.env, process })
+console.log({ importMetaEnv: import.meta.env })
 
 // Variables
 // ---------

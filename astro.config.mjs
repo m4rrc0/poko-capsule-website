@@ -29,9 +29,7 @@ const cloudflareViteConfig = {
       "react-dom/server": "react-dom/server.edge",
     },
   },
-  ssr: {
-    external: ['node:process'],
-  },
+  // ssr: { external: ['node:process'] }, // To activate node compat for specific packages
 }
 
 const adapterConfig = {
@@ -55,6 +53,7 @@ try {
   
   if (globalSettingsYaml) {
     globalSettings = yaml.load(globalSettingsYaml);
+    import.meta.env.PUBLIC_TEST = 'blou';
     import.meta.env.PUBLIC_GLOBAL_SETTINGS = globalSettings;
     consoleInfo(`Global settings loaded successfully for ${globalSettings?.siteName}`);
   } else {
