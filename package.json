@@ -8,8 +8,8 @@
   "homepage": "https://github.com/m4rrc0/poko-capsule-website#readme",
   "license": "",
   "engines": {
-    "node": ">=22",
-    "npm": ">=10",
+    "node": ">=22.0.0",
+    "npm": ">=10.0.0",
     "bun": ">=1.2.8"
   },
   "scripts": {
