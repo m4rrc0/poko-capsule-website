@@ -22,7 +22,7 @@ import {
   slugifyPath,
 } from "./src/config-11ty/filters/index.js";
 
-console.log({ PUBLIC_CONTENT_DIR })
+console.log('(from 11ty config) process.env: ', process.env)
 
 /**
  * @typedef { import("@11ty/eleventy").UserConfig } UserConfig

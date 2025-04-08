@@ -3,6 +3,9 @@ import packageJson from './package.json' with { type: "json" };
 
 const processEnv = typeof process !== 'undefined' ? process.env : {};
 
+console.log('processEnv: ', processEnv)
+console.log('process.env: ', process.env)
+
 // Fallback repo URL from package.json
 const fallbackRepoUrl = packageJson.repository?.url;
 const fallbackRepoUrlParts = fallbackRepoUrl?.replace('.git', '').split(':')?.pop()?.split('/');
