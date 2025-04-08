@@ -21,6 +21,9 @@ const PUBLIC_KEYSTATIC_STORAGE_LOCAL = (
 // Global Settings
 const globalSettings = import.meta.env.PUBLIC_GLOBAL_SETTINGS
 const useArticles = globalSettings?.contentTypes?.includes('articles') || false;
+
+console.log({ globalSettings, useArticles })
+
 let userConfig = {}
 try {
   userConfig = await import(`./${PUBLIC_CONTENT_DIR}/_config/index.js`);
