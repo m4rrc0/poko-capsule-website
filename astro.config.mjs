@@ -29,6 +29,9 @@ const cloudflareViteConfig = {
       "react-dom/server": "react-dom/server.edge",
     },
   },
+  ssr: {
+    external: ['node:process'],
+  },
 }
 
 const adapterConfig = {

@@ -2,6 +2,10 @@ import { config, fields, collection, type LocalConfig, type GitHubConfig, single
 import { wrapper, block, inline, mark, repeating } from '@keystatic/core/content-components'
 // export const markdocConfig = fields.markdoc.createMarkdocConfig({});
 
+import process from "node:process";
+
+console.log({ importMetaEnv: import.meta.env, processEnv: process.env, process })
+
 // Variables
 // ---------
 const PUBLIC_CONTENT_DIR = import.meta.env.PUBLIC_CONTENT_DIR || 'content';
@@ -21,8 +25,6 @@ const PUBLIC_KEYSTATIC_STORAGE_LOCAL = (
 // Global Settings
 const globalSettings = import.meta.env.PUBLIC_GLOBAL_SETTINGS
 const useArticles = globalSettings?.contentTypes?.includes('articles') || false;
-
-console.log({ globalSettings, useArticles })
 
 let userConfig = {}
 try {
