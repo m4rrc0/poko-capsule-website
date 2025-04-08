@@ -7,6 +7,11 @@
   "description": "A low cost, high power website builder you trully own",
   "homepage": "https://github.com/m4rrc0/poko-capsule-website#readme",
   "license": "",
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10",
+    "bun": ">=1.2.8"
+  },
   "scripts": {
     "nothing": "#",
     "CMS": "------------CMS------------",
@@ -27,7 +32,8 @@
     "concurrently": "bun --bun ./node_modules/.bin/concurrently",
     "dev": "bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun dev:cms\" \"bun --bun dev:site\"",
     "start": "PREFERRED_HOSTING=node bun --bun build:cms && bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun preview:cms\" \"bun --bun start:site\"",
-    "build": "bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun build:cms\" \"wait-on -d 500 ./dist && bun --bun build:site\"",
+    "build": "BUN_VERSION=1.2.8 bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun build:cms\" \"wait-on -d 500 ./dist && bun --bun build:site\"",
+    "build:npm": "concurrently --names CMS,Site -c red,blue \"astro build\" \"wait-on -d 500 ./dist && eleventy\"",
     "preview": "bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun preview:cms\" \"bun --bun preview:site\"",
     "LOCAL_PREVIEW": "------- LOCAL PREVIEW -------",
     "wrangler": "wrangler",
