@@ -8,6 +8,35 @@ import { PUBLIC_CONTENT_DIR } from '../config.env.js';
 const fileHashesFile = '.cache/file-hashes.json';
 const lastBuildTimeFile = '.cache/last-build-time';
 
+// Detect which package manager was used to run this script and capture any flags
+const detectPackageManager = () => {
+  // Check if script was run with Bun and capture any flags
+  if (process.argv[0].includes('bun')) {
+    // Get all bun-specific flags from process.execArgv
+    const bunFlags = process.execArgv
+      .filter(arg => arg.startsWith('--') || arg.startsWith('-'))
+      .join(' ');
+    
+    // Return bun with any flags
+    return bunFlags ? `bun ${bunFlags}` : 'bun';
+  }
+  
+  // Check environment variables set by npm
+  if (process.env.npm_config_user_agent && process.env.npm_config_user_agent.includes('npm')) {
+    return 'npm';
+  }
+  
+  // Default to npm if we can't determine
+  return 'npm';
+};
+
+// Get the package manager to use for running scripts
+const packageManager = detectPackageManager();
+
+// Log which package manager was detected
+console.log(`Using package manager: ${packageManager}`);
+
+
 // Function to calculate hash of a file
 const getFileHash = (filePath) => {
   try {
@@ -199,9 +228,9 @@ const runConditionalBuild = () => {
   // If this is the first run after a clean and we created tracking files,
   // we should run a full build regardless of detected changes
   if (isFirstRun) {
-    console.log('First run after clean detected, running full build...');
+    console.log(`First run after clean detected, running full build with ${packageManager}...`);
     try {
-      execSync(`bun run build`, { stdio: 'inherit' });
+      execSync(`${packageManager} run build`, { stdio: 'inherit' });
       console.log('\nInitial build complete');
       return;
     } catch (error) {
@@ -252,9 +281,9 @@ const runConditionalBuild = () => {
   
   // Run the scripts
   for (const { script, description } of scriptsToRun) {
-    console.log(`\n${description}`);
+    console.log(`\n${description} (using ${packageManager})`);
     try {
-      execSync(`bun run ${script}`, { stdio: 'inherit' });
+      execSync(`${packageManager} run ${script}`, { stdio: 'inherit' });
     } catch (error) {
       console.error(`Error running ${script}:`, error.message);
     }

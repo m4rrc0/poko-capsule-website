@@ -9,4 +9,16 @@
   "vars": {
     // "BUN_VERSION": "1.2.8"
   }
+  // "env": {
+  //   "staging": {
+  //     "vars": {
+  //       "API_HOST": "staging.example.com"
+  //     }
+  //   },
+  //   "production": {
+  //     "vars": {
+  //       "API_HOST": "production.example.com"
+  //     }
+  //   }
+  // }
 }
