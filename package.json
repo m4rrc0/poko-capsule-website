@@ -15,13 +15,13 @@
   "scripts": {
     "nothing": "#",
     "CMS": "------------CMS------------",
-    "astro": "bun --bun ./node_modules/.bin/astro",
+    "--astro": "bun --bun ./node_modules/.bin/astro",
     "dev:cms": "bun --bun astro dev",
     "start:cms": "bun --bun astro dev",
     "build:cms": "bun --bun astro build",
     "preview:cms": "bun --bun astro preview",
     "SITE": "------------SITE------------",
-    "eleventy:bun": "bun --bun ./node_modules/.bin/eleventy",
+    "--eleventy:bun": "bun --bun ./node_modules/.bin/eleventy",
     "eleventy": "eleventy",
     "dev:site": "eleventy --serve",
     "start:site": "eleventy --serve",
@@ -29,7 +29,7 @@
     "preview:site": "eleventy-dev-server --dir=dist",
     "preview:eleventy": "eleventy --serve",
     "GLOBAL": "------------GLOBAL------------",
-    "concurrently": "bun --bun ./node_modules/.bin/concurrently",
+    "--concurrently": "bun --bun ./node_modules/.bin/concurrently",
     "dev": "bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun dev:cms\" \"bun --bun dev:site\"",
     "start": "PREFERRED_HOSTING=node bun --bun build:cms && bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun preview:cms\" \"bun --bun start:site\"",
     "build": "bun --bun concurrently --names CMS,Site -c red,blue \"bun --bun build:cms\" \"wait-on -d 500 ./dist && bun --bun build:site\"",
@@ -52,7 +52,7 @@
     "pre-watch:netlify": "PREFERRED_HOSTING=netlify BROWSER=none netlify serve --context prewatch",
     "watch:netlify": "PREFERRED_HOSTING=netlify BROWSER=none nodemon --watch ${PUBLIC_CONTENT_DIR} -e mdoc,ts,json -x \"netlify serve --context watch\"",
     "UTILS": "------- UTILS -------",
-    "clean": "rm -rf dist .astro .wrangler .netlify .vercel .last-build-time .file-hashes.json",
+    "clean": "rm -rf dist .astro .wrangler .netlify .vercel .cache",
     "generate-secret": "bun run generate-keystatic-secret.js"
   },
   "keywords": [
