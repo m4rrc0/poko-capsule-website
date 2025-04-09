@@ -122,6 +122,7 @@ const scanAndLogFiles = () => {
   // Log cache directories specifically
   console.log('\n=== CACHE DIRECTORIES ===');
   const cacheDirs = [
+    'dist',
     '.cache',
     '.astro',
     'node_modules/.astro',
