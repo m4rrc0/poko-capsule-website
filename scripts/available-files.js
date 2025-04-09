@@ -125,6 +125,7 @@ const scanAndLogFiles = () => {
     '.cache',
     '.astro',
     'node_modules/.astro',
+    'node_modules/.astro/file-hashes.json',
     '.wrangler',
     '.netlify',
     '.vercel',
