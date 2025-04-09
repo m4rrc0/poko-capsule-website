@@ -7,6 +7,6 @@
   ],
   "send_metrics": true,
   "vars": {
-    "BUN_VERSION": "1.2.8"
+    // "BUN_VERSION": "1.2.8"
   }
 }
