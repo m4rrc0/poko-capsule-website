@@ -123,10 +123,13 @@ const scanAndLogFiles = () => {
   const cacheDirs = [
     '.cache',
     '.astro',
+    'node_modules/.astro',
     '.wrangler',
     '.netlify',
     '.vercel',
-    'node_modules/.cache'
+    'node_modules/.cache',
+    '.npm',
+    '.bun/install/cache'
   ];
   
   cacheDirs.forEach(cacheDir => {
