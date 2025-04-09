@@ -55,6 +55,7 @@ const scanAndLogFiles = () => {
     ignore: [
       'node_modules/**',  // Exclude node_modules for brevity
       '.git/**', // Exclude git
+      '.bun/install/cache/**' // Exclude bun cache for brevity
     ],
     nodir: false  // Include directories
   });
@@ -129,7 +130,8 @@ const scanAndLogFiles = () => {
     '.vercel',
     'node_modules/.cache',
     '.npm',
-    '.bun/install/cache'
+    '.bun/install/cache/file-hashes.json',
+    '.bun/file-hashes.json',
   ];
   
   cacheDirs.forEach(cacheDir => {
