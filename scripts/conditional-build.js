@@ -232,7 +232,7 @@ const runConditionalBuild = () => {
   if (needsCache) {
     console.log('Dist directory not found, trying to retrieve cached version...');
     try {
-      execSync(`${packageManager} run scripts/restore-output-dir`, { stdio: 'inherit' });
+      execSync(`${packageManager} run scripts/restore-output-dir.js`, { stdio: 'inherit' });
       console.log('\nCache restored');
       execSync(`${packageManager} run build:site`, { stdio: 'inherit' });
       console.log('\nSite build complete');
