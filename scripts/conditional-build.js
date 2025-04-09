@@ -119,20 +119,25 @@ const buildMap = [
     script: 'build:site',
     description: 'Content files changed, rebuilding site'
   },
+//   {
+//     pattern: new RegExp(`^(?!${PUBLIC_CONTENT_DIR}/).*`),
+//     script: 'build',
+//     description: 'Something has changed outside of the content folder, rebuilding everything'
+//   },
   {
-    pattern: /^src\//,
+    pattern: /^(src|cms)\//,
     script: 'build',
-    description: 'CMS source files changed, rebuilding CMS'
-  },
-  {
-    pattern: /^(public|static)\//,
-    script: 'build',
-    description: 'Static assets changed, rebuilding everything'
+    description: 'CMS source files changed, rebuilding everything'
   },
   {
     pattern: /\.(js|ts|jsx|tsx|astro)$/,
     script: 'build',
     description: 'Code files changed, rebuilding everything'
+  },
+  {
+    pattern: new RegExp(`^${PUBLIC_CONTENT_DIR}\/(_settings|_config)\/`),
+    script: 'build',
+    description: 'Config files changed, rebuilding everything'
   }
 ];
 
