@@ -87,7 +87,8 @@ const viteConfig = {
   },
   ...((LOCAL_BUILD && PREFERRED_HOSTING === 'cloudflare') || CLOUDFLARE_BUILD) ? cloudflareViteConfig : {}
 }
-  
+
+console.log({ viteConfig })
 
 // https://astro.build/config
 export default defineConfig({
