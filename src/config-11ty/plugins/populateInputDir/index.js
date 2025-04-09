@@ -18,7 +18,10 @@ export default async function(eleventyConfig, pluginOptions) {
     let occupiedPaths = []
     const pathSourceMap = {}; // Track sources for each path
     const skippedPathsMap = {}; // Track paths that were skipped (already existed)
-    const actualContentFilePaths = await glob(`${inputDir}/**/*`)
+    // TODO: check the nodir option is working as expected
+    const actualContentFilePaths = await glob(`${inputDir}/**/*`, {
+        nodir: true
+    })
     occupiedPaths.push(...actualContentFilePaths.map(p => p.replace(`${inputDir}/`, '')))
 
     if (logLevel === 'debug') {

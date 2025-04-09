@@ -5,5 +5,8 @@
   "compatibility_flags": [
     "nodejs_compat"
   ],
-  "send_metrics": true
+  "send_metrics": true,
+  "vars": {
+    "BUN_VERSION": "1.2.8"
+  }
 }
