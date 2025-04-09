@@ -5,8 +5,8 @@ import { glob } from 'glob';
 import { createHash } from 'crypto';
 import { PUBLIC_CONTENT_DIR } from '../config.env.js';
 
-const fileHashesFile = '.cache/file-hashes.json';
-const lastBuildTimeFile = '.cache/last-build-time';
+const fileHashesFile = 'node_modules/.astro/file-hashes.json';
+const lastBuildTimeFile = 'node_modules/.astro/last-build-time';
 
 // Detect which package manager was used to run this script and capture any flags
 const detectPackageManager = () => {
