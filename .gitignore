@@ -4,6 +4,7 @@ node_modules
 # output
 out
 dist/**
+!dist/ignore
 *.tgz
 _site
 _output
