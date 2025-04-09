@@ -25,7 +25,7 @@ const cloudflareViteConfig = {
   resolve: {
     // Use react-dom/server.edge instead of react-dom/server.browser for React 19.
     // Without this, MessageChannel from node:worker_threads needs to be polyfilled.
-    alias: import.meta.env.PROD && {
+    alias: (import.meta.env.PROD || import.meta.env.NODE_ENV === 'production') && {
       "react-dom/server": "react-dom/server.edge",
     },
   },
@@ -88,7 +88,7 @@ const viteConfig = {
   ...((LOCAL_BUILD && PREFERRED_HOSTING === 'cloudflare') || CLOUDFLARE_BUILD) ? cloudflareViteConfig : {}
 }
 
-console.log({ viteConfig })
+console.log({ viteConfig, isProd: import.meta.env.NODE_ENV === 'production' })
 
 // https://astro.build/config
 export default defineConfig({
