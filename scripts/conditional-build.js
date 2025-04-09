@@ -170,6 +170,11 @@ const buildMap = [
   }
 ];
 
+// Check if dist directory exists
+const distDirExists = () => {
+  return existsSync(join(process.cwd(), 'dist'));
+};
+
 // Ensure tracking files exist before running the build
 const ensureTrackingFiles = () => {
   const lastBuildTimePath = join(process.cwd(), lastBuildTimeFile);
@@ -219,6 +224,20 @@ const ensureTrackingFiles = () => {
 
 // Main function
 const runConditionalBuild = () => {
+  // Check if dist directory exists, if not we need a full build
+  const needsFullBuild = !distDirExists();
+  if (needsFullBuild) {
+    console.log('Dist directory not found, running full build...');
+    try {
+      execSync(`${packageManager} run build`, { stdio: 'inherit' });
+      console.log('\nFull build complete');
+      return;
+    } catch (error) {
+      console.error(`Error running full build:`, error.message);
+      return;
+    }
+  }
+  
   // Ensure tracking files exist before proceeding
   const isFirstRun = ensureTrackingFiles();
   
