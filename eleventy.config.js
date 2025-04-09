@@ -10,7 +10,7 @@ import eleventyNavigationPlugin from "@11ty/eleventy-navigation";
 import { imageTransformOptions } from './src/config-11ty/plugins/imageTransform.js';
 import populateInputDir from './src/config-11ty/plugins/populateInputDir/index.js';
 // Local helper packages
-import { PUBLIC_CONTENT_DIR } from './config.env.js'
+import { PUBLIC_CONTENT_DIR, OUTPUT_DIR } from './config.env.js'
 import { div, callout, calloutShortcode } from './src/config-markdoc/tags-examples.js';
 import eleventyComputed from './src/data/eleventyComputed.js';
 import { consoleInfo } from './src/utils/build.js';
@@ -34,7 +34,7 @@ export const config = {
     // data: "../src/data", // Directory for global data files. Default: "_data"
     // data: "/src/data", // Directory for global data files. Default: "_data"
     // output: "public",
-    output: "dist",
+    output: OUTPUT_DIR,
   },
   templateFormats: ["md", "njk", "html", "11ty.js"],
   markdownTemplateEngine: "njk",

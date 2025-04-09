@@ -3,10 +3,10 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { glob } from 'glob';
 import { createHash } from 'crypto';
-import { PUBLIC_CONTENT_DIR } from '../config.env.js';
+import { PUBLIC_CONTENT_DIR, CACHE_DIR, OUTPUT_DIR } from '../config.env.js';
 
-const fileHashesFile = '.cache/file-hashes.json';
-const lastBuildTimeFile = '.cache/last-build-time';
+const fileHashesFile = `${CACHE_DIR}/file-hashes.json`;
+const lastBuildTimeFile = `${CACHE_DIR}/last-build-time`;
 
 // Detect which package manager was used to run this script and capture any flags
 const detectPackageManager = () => {
@@ -80,8 +80,11 @@ const getModifiedFilesByHash = () => {
   // Get all files to check
   const allFiles = glob.sync('**/*', { 
     ignore: [
-      'node_modules/**', 
-      'dist/**', 
+      'node_modules/**',
+      CACHE_DIR,
+      `${CACHE_DIR}/**`,
+      OUTPUT_DIR,
+      `${OUTPUT_DIR}/**`,
       '.git/**', 
       fileHashesFile,
       lastBuildTimeFile,
@@ -143,11 +146,6 @@ const getModifiedFiles = () => {
 
 // Define file patterns and their corresponding build scripts
 const buildMap = [
-  {
-    pattern: new RegExp(`^${PUBLIC_CONTENT_DIR}\/`),
-    script: 'build:site',
-    description: 'Content files changed, rebuilding site'
-  },
 //   {
 //     pattern: new RegExp(`^(?!${PUBLIC_CONTENT_DIR}/).*`),
 //     script: 'build',
@@ -167,12 +165,17 @@ const buildMap = [
     pattern: new RegExp(`^${PUBLIC_CONTENT_DIR}\/(_settings|_config)\/`),
     script: 'build',
     description: 'Config files changed, rebuilding everything'
-  }
+  },
+  {
+    pattern: new RegExp(`^${PUBLIC_CONTENT_DIR}\/`),
+    script: 'build:site',
+    description: 'Content files changed, rebuilding site'
+  },
 ];
 
-// Check if dist directory exists
+// Check if output directory exists
 const distDirExists = () => {
-  return existsSync(join(process.cwd(), 'dist'));
+  return existsSync(join(process.cwd(), OUTPUT_DIR));
 };
 
 // Ensure tracking files exist before running the build
@@ -197,7 +200,7 @@ const ensureTrackingFiles = () => {
     const allFiles = glob.sync('**/*', { 
       ignore: [
         'node_modules/**', 
-        'dist/**', 
+        `${OUTPUT_DIR}/**`, 
         '.git/**', 
         fileHashesFile,
         lastBuildTimeFile,
@@ -224,6 +227,21 @@ const ensureTrackingFiles = () => {
 
 // Main function
 const runConditionalBuild = () => {
+  // Check if dist directory exists, if not we try to retrieve the cached version
+  const needsCache = !distDirExists();
+  if (needsCache) {
+    console.log('Dist directory not found, trying to retrieve cached version...');
+    try {
+      execSync(`${packageManager} run scripts/restore-output-dir`, { stdio: 'inherit' });
+      console.log('\nCache restored');
+      execSync(`${packageManager} run build:site`, { stdio: 'inherit' });
+      console.log('\nSite build complete');
+      return;
+    } catch (error) {
+      console.error(`Error restoring cache:`, error.message);
+    }
+  }
+
   // Check if dist directory exists, if not we need a full build
   const needsFullBuild = !distDirExists();
   if (needsFullBuild) {

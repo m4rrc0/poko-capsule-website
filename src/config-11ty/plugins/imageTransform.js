@@ -1,3 +1,5 @@
+import { OUTPUT_DIR } from "../../../config.env.js"
+
 export const imageTransformOptions = {
     // which file extensions to process
 	extensions: "html", // Default
@@ -8,7 +10,7 @@ export const imageTransformOptions = {
 
     // Project-relative path to the output image directory
     // outputDir: "./img/", // (default)
-    outputDir: "./dist/assets/images/", // (default)
+    outputDir: `./${OUTPUT_DIR}/assets/images/`, // (default)
 		// A path-prefix-esque directory for the <img src> attribute.
     // Not recommended with Image HTML Transform
 		urlPath: "/assets/images/",

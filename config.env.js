@@ -10,6 +10,11 @@ const fallbackRepoName = fallbackRepoUrlParts?.pop();
 const fallbackRepoOwner = fallbackRepoUrlParts?.pop();
 const fallbackRepo = `${fallbackRepoOwner}/${fallbackRepoName}`;
 
+// Output directory
+export const OUTPUT_DIR = processEnv.OUTPUT_DIR || 'dist';
+// Cache directory
+export const CACHE_DIR = processEnv.CACHE_DIR || 'node_modules/.astro';
+
 // PUBLIC_CONTENT_DIR
 export const PUBLIC_CONTENT_DIR = processEnv.PUBLIC_CONTENT_DIR || 'content';
 // PUBLIC_WORKING_DIR
