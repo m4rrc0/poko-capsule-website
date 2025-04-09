@@ -1,6 +1,6 @@
 # To avoid using the new text lockfile which is not compatible with cloudflare yet
 # https://github.com/#oven-sh/bun/discussions/16846#discussioncomment-11989536
-# saveTextLockfile = false
+saveTextLockfile = false
 # The workaround is creating an empty bun.lockdb and make sure BUN_VERSION is > 1.2.1
 
 [install.cache]
