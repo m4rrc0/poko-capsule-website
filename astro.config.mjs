@@ -47,8 +47,8 @@ const adapter = LOCAL_BUILD
 let globalSettings;
 try {
   const globalSettingsYaml = await readFirstExistingFile([
-    `${PUBLIC_CONTENT_DIR}/_settings/global.yaml`,
-    `${PUBLIC_WORKING_DIR}/_settings/global.yaml`,
+    `${PUBLIC_CONTENT_DIR}/_data/globalSettings.yaml`,
+    `${PUBLIC_WORKING_DIR}/_data/globalSettings.yaml`,
   ]);
   
   if (globalSettingsYaml) {

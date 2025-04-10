@@ -16,9 +16,9 @@ export const OUTPUT_DIR = processEnv.OUTPUT_DIR || 'dist';
 export const CACHE_DIR = processEnv.CACHE_DIR || 'node_modules/.astro';
 
 // PUBLIC_CONTENT_DIR
-export const PUBLIC_CONTENT_DIR = processEnv.PUBLIC_CONTENT_DIR || 'content';
+export const PUBLIC_CONTENT_DIR = processEnv.PUBLIC_CONTENT_DIR || '_content';
 // PUBLIC_WORKING_DIR
-export const PUBLIC_WORKING_DIR = processEnv.PUBLIC_WORKING_DIR || PUBLIC_CONTENT_DIR || 'content';
+export const PUBLIC_WORKING_DIR = processEnv.PUBLIC_WORKING_DIR || PUBLIC_CONTENT_DIR || '_content';
 // Only keep the last child directory
 export const PUBLIC_WORKING_SUBDIR = PUBLIC_WORKING_DIR.split('/').pop();
 // POKO_THEME

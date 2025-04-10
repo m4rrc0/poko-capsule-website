@@ -9,11 +9,6 @@ _site
 _output
 public
 
-# Mock content
-# .content
-# _content
-# mock-content
-
 # code coverage
 coverage
 *.lcov
@@ -36,6 +31,7 @@ report.[0-9]_.[0-9]_.[0-9]_.[0-9]_.json
 .astro
 .wrangler
 .netlify
+.vercel
 .bun
 
 # IntelliJ based IDEs
