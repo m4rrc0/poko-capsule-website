@@ -103,4 +103,33 @@ export default {
             ...(data.tags || [])
         ].filter(Boolean);
     },
+    eleventyNavigation: (data) => {
+        const isNavItem = data.nav?.discriminant;
+        const hasCustomNavValue = data.nav?.value?.discriminant;
+        const navCustomValues = data.nav?.value?.value;
+        if (!isNavItem) {
+            // Do not add to eleventyNavigation
+            return;
+        }
+        if (!hasCustomNavValue) {
+            // Add to eleventyNavigation with default values from page
+            return {
+                key: data.page.fileSlug,
+                title: data.name,
+                // parent: data.parentSlug, // Not used for now... ?permalink bug?
+                order: data.order ?? 0,
+            }
+        }
+        if (hasCustomNavValue) {
+            // Add to eleventyNavigation with customized nav values
+            return {
+                key: data.page.fileSlug,
+                title: navCustomValues?.title ?? data.name,
+                parent: navCustomValues?.parent ?? data.parentSlug,
+                order: navCustomValues?.order ?? data.order ?? 0,
+            }
+        }
+        console.error(`Unexpected nav configuration: ${data.nav}`)
+        return;
+    },
 }

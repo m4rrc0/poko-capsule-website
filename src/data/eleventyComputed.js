@@ -4,6 +4,7 @@ import { PUBLIC_USER_DIR } from '../../config.env.js';
 
 export default {
     // ...temp,
+    lang: (data) => data.lang || data.globalSettings?.lang || 'en',
     permalink: (data) => {
         if (typeof data.permalink === 'boolean' && !data.permalink) {
             return false;
@@ -28,34 +29,22 @@ export default {
         return `${filePathStem}.${data.page.outputFileExtension}`
     },
     eleventyNavigation: (data) => {
-        const isNavItem = data.nav?.discriminant;
-        const hasCustomNavValue = data.nav?.value?.discriminant;
-        const navCustomValues = data.nav?.value?.value;
-        if (!isNavItem) {
-            // Do not add to eleventyNavigation
-            return;
+        if (!data.eleventyNavigation?.add) {
+            return false;
         }
-        if (!hasCustomNavValue) {
-            // Add to eleventyNavigation with default values from page
-            return {
-                key: data.page.fileSlug,
-                title: data.name,
-                // parent: data.parentSlug, // Not used for now... ?permalink bug?
-                order: data.order ?? 0,
-            }
+        return {
+            key: data.page.fileSlug,
+            title: data.eleventyNavigation?.title || data.name,
+            parent: data.eleventyNavigation?.parent,
+            order: data.eleventyNavigation?.order,
         }
-        if (hasCustomNavValue) {
-            // Add to eleventyNavigation with customized nav values
-            return {
-                key: data.page.fileSlug,
-                title: navCustomValues?.title ?? data.name,
-                parent: navCustomValues?.parent ?? data.parentSlug,
-                order: navCustomValues?.order ?? data.order ?? 0,
-            }
-        }
-        console.error(`Unexpected nav configuration: ${data.nav}`)
-        return;
     },
+    // eleventyNavigation: {
+    //     // add: (data) => data.eleventyNavigation?.add || false,
+    //     key: (data) => data.page.fileSlug,
+    //     title: (data) => data.eleventyNavigation?.title || data.name || "test",
+    // },
+    // eleventyNavigation: (data) => data.eleventyNavigation?.add ? data.eleventyNavigation : undefined,
     metadata: (data) => {
         const siteName = data.globalSettings?.siteName || '';
         return {

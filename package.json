@@ -22,12 +22,12 @@
     "astro": "astro",
     "dev:cms": "bun --bun astro dev",
     "start:cms": "bun --bun astro dev",
-    "build:cms": "bun --bun astro build && bun --bun run scripts/cache-output-dir.js",
+    "build:cms": "bun --bun astro build && bun --bun run cache-output",
     "preview:cms": "bun --bun astro preview",
     "SITE": "------------SITE------------",
     "--eleventy:bun": "bun --bun ./node_modules/.bin/eleventy",
     "eleventy": "eleventy",
-    "dev:site": "eleventy --serve",
+    "dev:site": "bun --bun run eleventy --serve",
     "start:site": "eleventy --serve",
     "build:site": "bun --bun run restore-output && eleventy",
     "preview:site": "eleventy-dev-server --dir=dist",
@@ -82,7 +82,6 @@
     "url": "https://www.m4rr.co/"
   },
   "dependencies": {
-    "@11ty/eleventy": "^3.0.0",
     "@astrojs/cloudflare": "^12.4.0",
     "@astrojs/markdoc": "^0.12.11",
     "@astrojs/netlify": "^6.2.5",
@@ -91,6 +90,7 @@
     "@astrojs/vercel": "^8.1.3",
     "@keystatic/astro": "^5.0.6",
     "@keystatic/core": "^0.5.46",
+    "@sindresorhus/slugify": "^2.2.1",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "astro": "^5.5.6",
@@ -98,6 +98,7 @@
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
+    "@11ty/eleventy": "^3.0.0",
     "@11ty/eleventy-img": "^6.0.1",
     "@11ty/eleventy-navigation": "^1.0.4",
     "@11ty/eleventy-plugin-directory-output": "^1.0.1",

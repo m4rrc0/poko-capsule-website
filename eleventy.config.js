@@ -1,6 +1,3 @@
-// IMPORTS
-import fs from 'fs/promises';
-import yaml from 'js-yaml';
 // Plugins
 import directoryOutputPlugin from "@11ty/eleventy-plugin-directory-output";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
@@ -9,11 +6,12 @@ import pluginMarkdoc from "@m4rrc0/eleventy-plugin-markdoc";
 import eleventyNavigationPlugin from "@11ty/eleventy-navigation";
 import { imageTransformOptions } from './src/config-11ty/plugins/imageTransform.js';
 import populateInputDir from './src/config-11ty/plugins/populateInputDir/index.js';
+import yamlData from './src/config-11ty/plugins/yamlData/index.js';
 // Local helper packages
 import { PUBLIC_CONTENT_DIR, OUTPUT_DIR } from './config.env.js'
 import { div, callout, calloutShortcode } from './src/config-markdoc/tags-examples.js';
 import eleventyComputed from './src/data/eleventyComputed.js';
-import { consoleInfo } from './src/utils/build.js';
+
 // Eleventy Config
 import {
   toISOString,
@@ -50,26 +48,6 @@ export default async function (eleventyConfig) {
   // eleventyConfig.addWatchTarget("./src/content/", { resetConfig: true,  }); // NOTE: watching works but changes does not properly rerender...
   eleventyConfig.setUseGitIgnore(false);
 
-  // --------------------- Read user config
-  let globalSettings = {};
-  try {
-    const globalSettingsYaml = await fs.readFile(`${PUBLIC_CONTENT_DIR}/_settings/global.yaml`, 'utf8');
-    globalSettings = yaml.load(globalSettingsYaml);
-  } catch (e) {
-    consoleInfo(`No global settings found at '${PUBLIC_CONTENT_DIR}/_settings/global.yaml'`);
-  }
-
-      // --------------------- Read user config
-  // const globalSettingsYaml = await readFirstExistingFile([
-  //   `${PUBLIC_CONTENT_DIR}/_settings/global.yaml`,
-  //   `${PUBLIC_WORKING_DIR}/_settings/global.yaml`
-  // ])
-  // const globalSettingsYaml = await fs.readFile(`src/themes/${PUBLIC_WORKING_SUBDIR}/_settings/global.yaml`, 'utf8');
-  // const globalSettingsYaml = await fs.readFile(`${PUBLIC_CONTENT_DIR}/_settings/global.yaml`, 'utf8');
-  // const globalSettings = yaml.load(globalSettingsYaml);
-
-
-
   // --------------------- Populate Default Content
   eleventyConfig.addTemplate("pages/virtual.md", `# Hello Virtual`, {
     layout: "base",
@@ -87,6 +65,7 @@ export default async function (eleventyConfig) {
   eleventyConfig.addPlugin(directoryOutputPlugin);
 	eleventyConfig.addPlugin(eleventyNavigationPlugin);
 	eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageTransformOptions);
+  eleventyConfig.addPlugin(yamlData);
 	eleventyConfig.addPlugin(pluginWebc, {
     components: "src/components/**/*.webc",
     useTransform: true,
@@ -109,7 +88,7 @@ export default async function (eleventyConfig) {
   
   // --------------------- Global Data
   eleventyConfig.addGlobalData("layout", "base");
-  eleventyConfig.addGlobalData("globalSettings", globalSettings);
+  // eleventyConfig.addGlobalData("globalSettings", globalSettings);
   // Computed Data
   eleventyConfig.addGlobalData("eleventyComputed", eleventyComputed);
 
