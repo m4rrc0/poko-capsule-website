@@ -8,7 +8,7 @@ import { imageTransformOptions } from './src/config-11ty/plugins/imageTransform.
 import populateInputDir from './src/config-11ty/plugins/populateInputDir/index.js';
 import yamlData from './src/config-11ty/plugins/yamlData/index.js';
 // Local helper packages
-import { PUBLIC_CONTENT_DIR, OUTPUT_DIR } from './config.env.js'
+import { PUBLIC_WORKING_DIR, PUBLIC_WORKING_DIR_ABSOLUTE, PUBLIC_CONTENT_DIR, OUTPUT_DIR } from './config.env.js'
 import { div, callout, calloutShortcode } from './src/config-markdoc/tags-examples.js';
 import eleventyComputed from './src/data/eleventyComputed.js';
 
@@ -26,7 +26,7 @@ import {
 export const config = {
   dir: {
     // input: "src/templates",
-    input: PUBLIC_CONTENT_DIR,
+    input: PUBLIC_WORKING_DIR_ABSOLUTE,
     // includes: "../_includes",
     includes: "",
     // data: "../src/data", // Directory for global data files. Default: "_data"
@@ -49,6 +49,7 @@ export default async function (eleventyConfig) {
   eleventyConfig.setUseGitIgnore(false);
 
   // --------------------- Populate Default Content
+  // TODO: Virtual templates are not working
   eleventyConfig.addTemplate("pages/virtual.md", `# Hello Virtual`, {
     layout: "base",
     permalink: "/virtual/"

@@ -1,6 +1,12 @@
 {
   "extends": "astro/tsconfigs/strict",
   "compilerOptions": {
+    "baseUrl": ".",
+    // Path aliases
+    "paths": {
+      "#workingDir/*": ["_content/*"],
+      "#contentDir/*": ["_content/*"]
+    },
     // Environment setup & latest features
     "lib": ["esnext"],
     "target": "ESNext",

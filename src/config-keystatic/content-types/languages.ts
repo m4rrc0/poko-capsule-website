@@ -1,7 +1,7 @@
 import slugify from '@sindresorhus/slugify'
 import { fields, collection } from '@keystatic/core';
 // export const markdocConfig = fields.markdoc.createMarkdocConfig({});
-import { PUBLIC_WORKING_DIR } from '../variables.js';
+import { PUBLIC_CONTENT_DIR } from '../variables.js';
 
 // import { imageDirs } from '../common.js';
 
@@ -36,7 +36,7 @@ const generateLangCode = (name: string) => {
 };
 
 export const languages = collection({
-  path: `${PUBLIC_WORKING_DIR}/_data/languages/*`,
+  path: `${PUBLIC_CONTENT_DIR}/_data/languages/*`,
   format: { data: 'yaml' },
   entryLayout: 'form',
   label: 'Languages',

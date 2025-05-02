@@ -3,7 +3,7 @@ import { existsSync, readFileSync, writeFileSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { glob } from 'glob';
 import { createHash } from 'crypto';
-import { PUBLIC_CONTENT_DIR, CACHE_DIR, OUTPUT_DIR } from '../config.env.js';
+import { PUBLIC_WORKING_DIR, CACHE_DIR, OUTPUT_DIR } from '../config.env.js';
 
 const fileHashesFile = `${CACHE_DIR}/file-hashes.json`;
 const lastBuildTimeFile = `${CACHE_DIR}/last-build-time`;
@@ -147,7 +147,7 @@ const getModifiedFiles = () => {
 // Define file patterns and their corresponding build scripts
 const buildMap = [
 //   {
-//     pattern: new RegExp(`^(?!${PUBLIC_CONTENT_DIR}/).*`),
+//     pattern: new RegExp(`^(?!${PUBLIC_WORKING_DIR}/).*`),
 //     script: 'build',
 //     description: 'Something has changed outside of the content folder, rebuilding everything'
 //   },
@@ -162,12 +162,12 @@ const buildMap = [
     description: 'Code files changed, rebuilding everything'
   },
   {
-    pattern: new RegExp(`^${PUBLIC_CONTENT_DIR}\/(_settings|_config)\/`),
+    pattern: new RegExp(`^${PUBLIC_WORKING_DIR}\/(_settings|_config)\/`),
     script: 'build',
     description: 'Config files changed, rebuilding everything'
   },
   {
-    pattern: new RegExp(`^${PUBLIC_CONTENT_DIR}\/`),
+    pattern: new RegExp(`^${PUBLIC_WORKING_DIR}\/`),
     script: 'build:site',
     description: 'Content files changed, rebuilding site'
   },

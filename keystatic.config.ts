@@ -1,7 +1,6 @@
 import { config, type LocalConfig, type GitHubConfig } from '@keystatic/core';
 import {
-  PUBLIC_CONTENT_DIR,
-  PUBLIC_WORKING_DIR,
+  PUBLIC_CONTENT_PATH_PREFIX,
   REPO,
   PUBLIC_KEYSTATIC_STORAGE_LOCAL,
   globalSettings,
@@ -14,11 +13,12 @@ import { languages } from './src/config-keystatic/content-types/languages.ts';
 import { pages } from './src/config-keystatic/content-types/pages.ts'
 import { articles } from './src/config-keystatic/content-types/articles.ts';
 
-const useArticles = globalSettings?.contentTypes?.includes('articles') || false;
+const useArticles = globalSettings?.collections?.includes('articles') || false;
 
 // Storage
 const localMode: LocalConfig['storage'] = {
   kind: 'local',
+  pathPrefix: PUBLIC_CONTENT_PATH_PREFIX,
 };
 
 const githubMode: GitHubConfig['storage'] = {

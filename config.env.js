@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import { resolve } from 'path';
 import packageJson from './package.json' with { type: "json" };
 
 const processEnv = typeof process !== 'undefined' ? process.env : {};
@@ -15,12 +16,21 @@ export const OUTPUT_DIR = processEnv.OUTPUT_DIR || 'dist';
 // Cache directory
 export const CACHE_DIR = processEnv.CACHE_DIR || 'node_modules/.astro';
 
+// PUBLIC_CONTENT_PATH_PREFIX
+export const PUBLIC_CONTENT_PATH_PREFIX = processEnv.PUBLIC_CONTENT_PATH_PREFIX || '';
 // PUBLIC_CONTENT_DIR
 export const PUBLIC_CONTENT_DIR = processEnv.PUBLIC_CONTENT_DIR || '_content';
-// PUBLIC_WORKING_DIR
-export const PUBLIC_WORKING_DIR = processEnv.PUBLIC_WORKING_DIR || PUBLIC_CONTENT_DIR || '_content';
-// Only keep the last child directory
-export const PUBLIC_WORKING_SUBDIR = PUBLIC_WORKING_DIR.split('/').pop();
+// PUBLIC_WORKING_DIR merges relative paths from PUBLIC_CONTENT_PATH_PREFIX and PUBLIC_CONTENT_DIR
+export const PUBLIC_WORKING_DIR = (processEnv.PUBLIC_WORKING_DIR ||
+  (PUBLIC_CONTENT_PATH_PREFIX + '/' + PUBLIC_CONTENT_DIR))
+    .replace(/\/+/g, '/') // Replace multiple slashes with single slash
+    .replace(/\/$/, ''); // Remove trailing slash
+
+// PUBLIC_WORKING_DIR_ABSOLUTE properly concatenate PUBLIC_CONTENT_PATH_PREFIX and PUBLIC_CONTENT_DIR
+export const PUBLIC_WORKING_DIR_ABSOLUTE = processEnv.PUBLIC_WORKING_DIR_ABSOLUTE ||
+  (PUBLIC_CONTENT_DIR && resolve(PUBLIC_CONTENT_PATH_PREFIX, PUBLIC_CONTENT_DIR));
+
+  
 // POKO_THEME
 export const POKO_THEME = processEnv.POKO_THEME || 'default';
 // PUBLIC_USER_DIR
@@ -71,6 +81,7 @@ export default {
   REPO_OWNER,
   REPO_NAME,
   REPO,
-  PREFERRED_HOSTING
+  PREFERRED_HOSTING,
+  PUBLIC_WORKING_DIR
 }
 

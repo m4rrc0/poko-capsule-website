@@ -1,6 +1,7 @@
 // Variables
 // ---------
-export const PUBLIC_CONTENT_DIR = import.meta.env.PUBLIC_CONTENT_DIR || 'content';
+export const PUBLIC_CONTENT_PATH_PREFIX = import.meta.env.PUBLIC_CONTENT_PATH_PREFIX || '';
+export const PUBLIC_CONTENT_DIR = import.meta.env.PUBLIC_CONTENT_DIR || '_content';
 export const PUBLIC_WORKING_DIR = import.meta.env.PUBLIC_WORKING_DIR || PUBLIC_CONTENT_DIR;
 const VERCEL_GIT_REPO_OWNER = import.meta.env.PUBLIC_VERCEL_GIT_REPO_OWNER;
 const VERCEL_GIT_REPO_SLUG = import.meta.env.PUBLIC_VERCEL_GIT_REPO_SLUG;
@@ -20,8 +21,9 @@ export const globalSettings = typeof globalSettingsEnv === 'string' ? JSON.parse
 
 let userConfig = {}
 try {
-  userConfig = await import(`../../${PUBLIC_CONTENT_DIR}/_config/index.js`);
+  userConfig = await import('#workingDir/_config/index.js')
   console.info('INFO: User config file found');
+  // console.log({ 'userConfig navigation': userConfig.navigation })
 } catch (error) {
   console.info('INFO: No user config file found');
 }

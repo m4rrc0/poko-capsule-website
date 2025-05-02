@@ -1,8 +1,7 @@
 import { fields, collection } from '@keystatic/core';
 import { wrapper, block } from '@keystatic/core/content-components'
 // export const markdocConfig = fields.markdoc.createMarkdocConfig({});
-import { PUBLIC_WORKING_DIR } from '../variables.js';
-
+import { PUBLIC_CONTENT_DIR } from '../variables.js';
 import { imageDirs } from '../common.js';
 
 export const prose = fields.markdoc({
@@ -36,7 +35,7 @@ export const prose = fields.markdoc({
 export const pages = collection({
   label: 'Pages',
   slugField: 'name',
-  path: `${PUBLIC_WORKING_DIR}/pages/**`,
+  path: `${PUBLIC_CONTENT_DIR}/pages/**`,
   entryLayout: 'form', // or 'content'
   format: { contentField: 'prose' },
   columns: ['name'],
@@ -121,7 +120,7 @@ export const pages = collection({
 
 // const homepage = singleton({
 //   label: 'Home Page',
-//   path: `${PUBLIC_WORKING_DIR}/index`,
+//   path: `${PUBLIC_CONTENT_DIR}/index`,
 //   format: { contentField: 'prose' },
 //   schema: {
 //     name: fields.text({

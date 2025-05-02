@@ -22,7 +22,7 @@ const extractPathData = (data) => {
         pathData.collection = 'pages';
         urlParts.shift();
     } else {
-        for (const contentType of contentTypes) {
+        for (const contentType of collections) {
             if (urlParts[0] === contentType) {
                 pathData.collection = contentType;
                 // TODO: later: replace path segment with chosen collection name
@@ -39,7 +39,7 @@ const extractPathData = (data) => {
     return pathData;
 }
 
-const contentTypes = ['articles']
+const collections = ['articles']
 
 export default {
     pathData: (data) => extractPathData(data),

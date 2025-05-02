@@ -19,6 +19,11 @@
 
         <!-- User HTML head injection -->
         {{ globalSettings.htmlHead | safe }}
+
+        <!-- User CSS head injection -->
+        <style>
+            {{ globalSettings.cssHead | safe }}
+        </style>
     </head>
     <body>
         {% if collections.all | eleventyNavigation | length %}
