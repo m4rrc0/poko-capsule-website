@@ -1,6 +1,6 @@
 [build]
   publish = "dist/"
-  command = "npm run build"
+  command = "bun run build"
 
 [functions]
   # Sets a custom directory for Netlify Functions
@@ -9,17 +9,17 @@
 
 [dev]
   publish = "dist/"
-  command = "npm run build"
+  command = "bun run build"
   # port = 3000
 
 [context.dev]
   publish = "dist/"
-  command = "npm run build:eleventy"
+  command = "bun run build:eleventy"
 
 [context.prewatch]
   publish = "dist/"
-  command = "npm run build:cms"
+  command = "bun run build:cms"
 
 [context.watch]
   publish = "dist/"
-  command = "npm run build:eleventy" # TODO: Not convenient at all but without building the CMS, the functions are not detected or built
+  command = "bun run build:eleventy" # TODO: Not convenient at all but without building the CMS, the functions are not detected or built

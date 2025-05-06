@@ -1,0 +1,69 @@
+# POKO CAPSULE WEBSITE - LICENSING
+
+This project "poko - capsule website" is available under a multi-license structure designed to support both free personal use and commercial applications. Each license type is explained below.
+
+## General licensing rights
+
+Copyright (c) 2025-Present Marc Coët - <m4rr.co>
+
+Exclusive Licensing Entity:
+mookaï ASBL
+Registration Number: BE 1003.532.405
+Registered Address: Avenue Armand Husmans 47/2, 1050 Bruxelles, Belgique
+VAT/Tax ID: BE 1003.532.405
+
+All licensing rights, including the right to grant sublicenses, have been exclusively assigned to mookaï ASBL. All licensing inquiries and payments should be directed to the licensing entity.
+
+## License Types
+
+### 1. Personal Use License
+
+The Personal Use License (see LICENSES/PERSONAL-USE.md) is free and grants rights to:
+- Individual users for personal, non-commercial projects
+- Non-profit organizations not generating significant revenue
+- Projects that do not represent or promote commercial entities
+
+Key restrictions: Cannot use Organization JSON-LD schema on website homepage; cannot use for commercial purposes.
+
+### 2. Commercial Organization License
+
+The Commercial Organization License (see LICENSES/COMMERCIAL.md) is a paid license that grants:
+- Perpetual use of the software version purchased
+- Updates for one year from purchase date (renewable)
+- Unlimited website deployments for the organization and its activities
+- Source code access and modification rights
+
+License tiers are based on organization size and revenue:
+- Starter: 1-2 employees OR up to €100,000 annual revenue
+- Small: 3-10 employees OR €100,001 to €500,000 annual revenue
+- Medium: 11-50 employees OR €500,001 to €5,000,000 annual revenue
+- Large: 51+ employees OR over €5,000,000 annual revenue
+
+### 3. Reseller License
+
+The Reseller License (see LICENSES/RESELLER.md) is designed for web agencies, freelancers, and consultants who implement the software for clients.
+
+Key provisions:
+- Right to implement and distribute the software to clients
+- Requirement to ensure clients obtain appropriate licensing
+- Revenue sharing structure for Commercial Client implementations
+
+### 4. Third-Party Components
+
+This project incorporates third-party components with their own licenses. See LICENSES/THIRD-PARTY.md for details.
+
+## Open Source Foundation
+
+All versions of this software remain open source with specific commercial restrictions. Modifications must be kept open source under the same licensing scheme.
+
+## Governing Law
+
+All licenses are governed by the laws of Brussels, Belgium, and are administered by mookaï ASBL.
+
+## License Compliance
+
+Using this software constitutes acceptance of the applicable license terms. Compliance is required for continued use.
+
+## Contact Information
+
+For licensing inquiries, please contact legal-a4g6@mookai.be.
