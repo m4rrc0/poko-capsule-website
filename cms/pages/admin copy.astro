@@ -1,0 +1,334 @@
+---
+import BaseLayout from '../layouts/base.astro';
+import Test from '../components/test.svelte';
+// Client-side environment variables to expose to the frontend
+// const githubClientId = import.meta.env.PUBLIC_POKO_GITHUB_CLIENT_ID;
+---
+
+<BaseLayout>
+  <main>
+    <h1>GitHub Integration</h1>
+
+    <Test client:visible />
+    
+    <div id="github-auth-container">
+      <div id="login-section" style="display: none;">
+        <p>Sign in with GitHub to manage your repositories</p>
+        <button id="github-login" class="primary-button">Login with GitHub</button>
+      </div>
+      
+      <div id="authenticated-section" style="display: none;">
+        <div id="user-info">
+          <span>Logged in as: <span id="username"></span></span>
+          <button id="logout" class="secondary-button">Logout</button>
+        </div>
+        
+        <section>
+          <h2>Your Repositories</h2>
+          <div id="loading" style="display: none;">Loading repositories...</div>
+          <div id="error" style="display: none; color: red;"></div>
+          <ul id="repo-list"></ul>
+        </section>
+        
+        <section>
+          <h2>Fork a Repository</h2>
+          <form id="fork-form">
+            <div>
+              <label for="repo-owner">Repository Owner:</label>
+              <input type="text" id="repo-owner" required placeholder="e.g., octocat">
+            </div>
+            <div>
+              <label for="repo-name">Repository Name:</label>
+              <input type="text" id="repo-name" required placeholder="e.g., hello-world">
+            </div>
+            <div>
+              <label for="org-name">Organization (optional):</label>
+              <select id="org-name">
+                <option value="">Personal Account</option>
+                <!-- Organizations will be populated by JS -->
+              </select>
+            </div>
+            <button type="submit" class="primary-button">Fork Repository</button>
+          </form>
+          <div id="fork-result"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Import GitHub API utilities
+    import { 
+      isAuthenticated, 
+      getAccessToken, 
+      setAccessToken, 
+      clearAccessToken, 
+      parseAccessTokenFromHash,
+      getUserInfo,
+      getRepositories,
+      getOrganizations,
+      forkRepository
+    } from '../utils/github-api.js';
+    
+    // Safe DOM selector to handle null elements
+    const getElement = (id) => document.getElementById(id);
+    
+    // DOM elements
+    const loginSection = getElement('login-section');
+    const authenticatedSection = getElement('authenticated-section');
+    const usernameElement = getElement('username');
+    const repoListElement = getElement('repo-list');
+    const loadingElement = getElement('loading');
+    const errorElement = getElement('error');
+    const logoutButton = getElement('logout');
+    const githubLoginButton = getElement('github-login');
+    const forkForm = getElement('fork-form') as HTMLFormElement | null;
+    const orgSelect = getElement('org-name') as HTMLSelectElement | null;
+    const forkResult = getElement('fork-result');
+
+    // GitHub OAuth parameters
+    const githubAppUri = import.meta.env.PUBLIC_POKO_GITHUB_APP_URI;
+    const githubClientId = import.meta.env.PUBLIC_POKO_GITHUB_CLIENT_ID;
+    // http://localhost:4321/api/github-auth-callback
+    // const redirectUri = `${githubAppUri}/functions/github-auth-callback`;
+    // const redirectUri = `${githubAppUri}/api/github-auth-callback`;
+    const redirectUri = `${window.location.origin}/api/github-auth-callback`;
+
+    const scope = 'repo,admin:org,admin:org_hook,admin:repo_hook,admin:enterprise,admin:public_key,admin:gpg_key,admin:app';
+
+    // Check for access token in URL hash (after OAuth redirect)
+    const checkForToken = async () => {
+      const token = parseAccessTokenFromHash();
+      if (token) {
+        setAccessToken(token);
+        await loadUserData();
+      }
+    };
+
+    // Load user data and repositories
+    const loadUserData = async () => {
+      try {
+        if (loadingElement) loadingElement.style.display = 'block';
+        if (errorElement) errorElement.style.display = 'none';
+        
+        // Get user info
+        const user = await getUserInfo();
+        if (usernameElement) usernameElement.textContent = user.login || 'Unknown';
+        
+        // Get repositories
+        const repos = await getRepositories();
+        displayRepositories(repos);
+        
+        // Get organizations for fork dropdown
+        const orgs = await getOrganizations();
+        populateOrganizations(orgs);
+        
+        // Update UI
+        if (loginSection) loginSection.style.display = 'none';
+        if (authenticatedSection) authenticatedSection.style.display = 'block';
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        showError(errorMsg);
+        // If we get an authentication error, clear the token
+        if (typeof errorMsg === 'string' && 
+            (errorMsg.includes('No GitHub access token') || 
+             errorMsg.includes('Bad credentials'))) {
+          clearAccessToken();
+          showLoginSection();
+        }
+      } finally {
+        if (loadingElement) loadingElement.style.display = 'none';
+      }
+    };
+
+    // Display repositories in a list
+    const displayRepositories = (repos) => {
+      if (!repoListElement) return;
+      
+      repoListElement.innerHTML = '';
+      
+      if (!repos.length) {
+        repoListElement.innerHTML = '<li>No repositories found</li>';
+        return;
+      }
+      
+      const createRepoListItem = (repo) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          <a href="${repo.html_url}" target="_blank" rel="noopener">
+            ${repo.full_name}
+          </a>
+          <span>${repo.private ? '🔒 Private' : '🌐 Public'}</span>
+          ${repo.fork ? '<span>🍴 Fork</span>' : ''}
+        `;
+        return li;
+      };
+      
+      repos.forEach(repo => {
+        repoListElement.appendChild(createRepoListItem(repo));
+      });
+    };
+
+    // Populate organizations dropdown
+    const populateOrganizations = (orgs) => {
+      if (!orgSelect) return;
+      
+      const createOrgOption = (org) => {
+        const option = document.createElement('option');
+        option.value = org.login;
+        option.textContent = org.login;
+        return option;
+      };
+      
+      orgs.forEach(org => {
+        orgSelect.appendChild(createOrgOption(org));
+      });
+    };
+
+    // Show error message
+    const showError = (message) => {
+      if (!errorElement) return;
+      
+      errorElement.textContent = `Error: ${message}`;
+      errorElement.style.display = 'block';
+    };
+
+    // Show login section
+    const showLoginSection = () => {
+      if (loginSection) loginSection.style.display = 'block';
+      if (authenticatedSection) authenticatedSection.style.display = 'none';
+    };
+
+    // Event: GitHub login
+    githubLoginButton?.addEventListener('click', () => {
+      const authUrl = `https://github.com/login/oauth/authorize?client_id=${githubClientId}&redirect_uri=${encodeURIComponent(redirectUri)}&scope=${encodeURIComponent(scope)}`;
+      window.location.href = authUrl;
+    });
+
+    // Event: Logout
+    logoutButton?.addEventListener('click', () => {
+      clearAccessToken();
+      showLoginSection();
+    });
+
+    // Event: Fork repository
+    forkForm?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const ownerInput = document.getElementById('repo-owner') as HTMLInputElement | null;
+      const repoInput = document.getElementById('repo-name') as HTMLInputElement | null;
+      
+      if (!ownerInput || !repoInput || !forkResult) return;
+      
+      const owner = ownerInput.value;
+      const repo = repoInput.value;
+      const organization = orgSelect?.value || null;
+      
+      forkResult.innerHTML = 'Forking repository...';
+      
+      try {
+        const result = await forkRepository(owner, repo, organization);
+        forkResult.innerHTML = `
+          <p>Repository forked successfully!</p>
+          <p><a href="${result.html_url}" target="_blank" rel="noopener">View forked repo</a></p>
+        `;
+      } catch (error) {
+        const errorMsg = error instanceof Error ? error.message : String(error);
+        forkResult.innerHTML = `<p class="error">Error: ${errorMsg}</p>`;
+      }
+    });
+
+    // Initialize the app
+    const initApp = async () => {
+      await checkForToken();
+      
+      if (isAuthenticated()) {
+        await loadUserData();
+      } else {
+        showLoginSection();
+      }
+    };
+
+    // Start the app when the DOM is loaded
+    document.addEventListener('DOMContentLoaded', initApp);
+  </script>
+
+  <style>
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    h1, h2 {
+      margin-bottom: 1rem;
+    }
+    
+    section {
+      margin-top: 2rem;
+      padding: 1rem;
+      border: 1px solid #eee;
+      border-radius: 4px;
+    }
+    
+    #user-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding: 0.5rem 0;
+    }
+    
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    
+    li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid #eee;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    form div {
+      margin-bottom: 1rem;
+    }
+    
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+    
+    input, select {
+      width: 100%;
+      padding: 0.5rem;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    
+    button {
+      cursor: pointer;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 4px;
+      background-color: #eee;
+    }
+    
+    .primary-button {
+      background-color: #0366d6;
+      color: white;
+    }
+    
+    .secondary-button {
+      background-color: #eee;
+      color: #333;
+      border: 1px solid #ccc;
+    }
+    
+    .error {
+      color: red;
+    }
+  </style>
+</BaseLayout>

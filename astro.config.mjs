@@ -1,6 +1,7 @@
 import { resolve, dirname } from 'path';
 import yaml from 'js-yaml';
 import { defineConfig } from 'astro/config';
+import svelte from '@astrojs/svelte';
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
 import keystatic from '@keystatic/astro';
@@ -122,6 +123,7 @@ export default defineConfig({
   srcDir: './cms',
   integrations: [
     // ...(PUBLIC_CONTENT_IS_SYMLINK ? [contentSymlinkIntegration()] : []),
+    svelte(),
     react(),
     markdoc(),
     keystatic()

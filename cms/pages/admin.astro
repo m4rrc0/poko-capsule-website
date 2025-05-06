@@ -1,7 +1,23 @@
 ---
 import BaseLayout from '../layouts/base.astro';
+import GitHubIntegration from '../components/GitHubIntegration.svelte';
 ---
 
 <BaseLayout>
-  <p>Admin Page</p>
+  <main>
+    <h1>GitHub Integration</h1>
+    <GitHubIntegration client:only />
+  </main>
 </BaseLayout>
+
+<style>
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 2rem;
+  }
+  
+  h1 {
+    margin-bottom: 1.5rem;
+  }
+</style>
