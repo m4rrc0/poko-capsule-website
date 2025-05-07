@@ -78,13 +78,12 @@ jobs:
         working-directory: ${{ env.BUILD_PATH }}
       - name: Build with 11ty
         run: |
-          ${{ steps.detect-package-manager.outputs.runner }} run build:gh-pages"
+          ${{ steps.detect-package-manager.outputs.runner }} run build:gh-pages
         working-directory: ${{ env.BUILD_PATH }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ${{ env.BUILD_PATH }}/dist
-
   deploy:
     environment:
       name: github-pages
