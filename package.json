@@ -32,6 +32,8 @@
     "build:site": "bun --bun run restore-output && eleventy",
     "preview:site": "eleventy-dev-server --dir=dist",
     "preview:eleventy": "eleventy --serve",
+    "GH-PAGES": "------------GH-PAGES------------",
+    "build:gh-pages": "bun --bun run eleventy",
     "GLOBAL": "------------GLOBAL------------",
     "--concurrently": "bun --bun ./node_modules/.bin/concurrently",
     "concurrently": "concurrently",
