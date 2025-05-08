@@ -20,15 +20,17 @@ import {
   slugifyPath,
 } from "./src/config-11ty/filters/index.js";
 
+// TODOS:
+// - Look at persisting images in cache between builds: https://github.com/11ty/eleventy-img/issues/285
+
 /**
  * @typedef { import("@11ty/eleventy").UserConfig } UserConfig
  */
 export const config = {
   dir: {
     // input: "src/templates",
-    input: PUBLIC_WORKING_DIR_ABSOLUTE,
-    // includes: "../_includes",
-    includes: "",
+    input: PUBLIC_WORKING_DIR, // this is probably '_content'
+    includes: "_includes",
     // data: "../src/data", // Directory for global data files. Default: "_data"
     // data: "/src/data", // Directory for global data files. Default: "_data"
     // output: "public",
@@ -43,25 +45,9 @@ export const config = {
 export default async function (eleventyConfig) {
   // --------------------- Base Config
   eleventyConfig.setQuietMode(true);
-  eleventyConfig.addWatchTarget("./src/");
-  eleventyConfig.addWatchTarget("./src/config-11ty/", { resetConfig: true,  }); // NOTE: watching works but changes does not properly rerender...
-  // eleventyConfig.addWatchTarget("./src/content/", { resetConfig: true,  }); // NOTE: watching works but changes does not properly rerender...
-  eleventyConfig.setUseGitIgnore(false);
+  eleventyConfig.addWatchTarget("./src/config-11ty/**/*", { resetConfig: true }); // NOTE: watching works but changes does not properly rerender...
+  // eleventyConfig.setUseGitIgnore(false);
 
-  // --------------------- Populate Default Content
-  // TODO: Virtual templates are not working
-  eleventyConfig.addTemplate("pages/virtual.md", `# Hello Virtual`, {
-    layout: "base",
-    permalink: "/virtual/"
-  });
-
-  eleventyConfig.addTemplate("virtualll.11ty.js", {
-    data: () => ({ var: 2 }),
-    render: function(data) {
-      return `this is a test ${data.var}.`;
-    }
-  });
-  
   // --------------------- Plugins
   eleventyConfig.addPlugin(directoryOutputPlugin);
 	eleventyConfig.addPlugin(eleventyNavigationPlugin);
@@ -79,14 +65,15 @@ export default async function (eleventyConfig) {
       }
     }
   });
+  // Populate Default Content
   await eleventyConfig.addPlugin(populateInputDir, {
     // logLevel: 'debug',
     sources: ['src/content']
   });
 
   // --------------------- Layouts
-  eleventyConfig.addLayoutAlias("base", "_layouts/base.html");
-  
+  eleventyConfig.addLayoutAlias("base", "layouts/base.html");
+
   // --------------------- Global Data
   eleventyConfig.addGlobalData("layout", "base");
   // eleventyConfig.addGlobalData("globalSettings", globalSettings);

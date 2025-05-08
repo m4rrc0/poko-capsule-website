@@ -27,7 +27,7 @@
     "SITE": "------------SITE------------",
     "--eleventy:bun": "bun --bun ./node_modules/.bin/eleventy",
     "eleventy": "eleventy",
-    "dev:site": "bun --bun run eleventy --serve",
+    "dev:site": "bun run eleventy --serve",
     "start:site": "eleventy --serve",
     "build:site": "bun --bun run restore-output && eleventy",
     "preview:site": "eleventy-dev-server --dir=dist",

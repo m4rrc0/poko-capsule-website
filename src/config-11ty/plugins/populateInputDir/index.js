@@ -15,6 +15,15 @@ export default async function(eleventyConfig, pluginOptions) {
     const inputDir = eleventyConfig.dir.input;
     const sources = Array.isArray(pluginOptions?.sources) ? pluginOptions.sources : [pluginOptions?.sources];
 
+    // Add watch targets for sources
+    sources.forEach(source => {
+        if (typeof source === 'string') {
+            eleventyConfig.addWatchTarget(`./${source}/**/*`, { resetConfig: true });
+        } else if (typeof source === 'object' && source.in) {
+            eleventyConfig.addWatchTarget(`./${source.in}/**/*`, { resetConfig: true });
+        }
+    })
+
     let occupiedPaths = []
     const pathSourceMap = {}; // Track sources for each path
     const skippedPathsMap = {}; // Track paths that were skipped (already existed)

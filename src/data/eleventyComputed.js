@@ -10,7 +10,7 @@ export default {
             return false;
         }
         if (typeof data.permalink === 'string' && data.permalink !== '') {
-            // TODO: I just want to detect if this happens
+            // NOTE: I just want to detect if this happens
             console.log({permalink: data.permalink})
         }
         const filePathStem = data.page.filePathStem
