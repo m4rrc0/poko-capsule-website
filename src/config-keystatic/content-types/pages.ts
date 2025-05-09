@@ -1,5 +1,5 @@
 import { fields, collection } from '@keystatic/core';
-import { wrapper, block } from '@keystatic/core/content-components'
+import { wrapper } from '@keystatic/core/content-components'
 // export const markdocConfig = fields.markdoc.createMarkdocConfig({});
 import { PUBLIC_CONTENT_DIR } from '../variables.js';
 import { imageDirs } from '../common.js';

@@ -24,7 +24,8 @@ export const PUBLIC_CONTENT_DIR = processEnv.PUBLIC_CONTENT_DIR || '_content';
 export const PUBLIC_WORKING_DIR = (processEnv.PUBLIC_WORKING_DIR ||
   (PUBLIC_CONTENT_PATH_PREFIX + '/' + PUBLIC_CONTENT_DIR))
     .replace(/\/+/g, '/') // Replace multiple slashes with single slash
-    .replace(/\/$/, ''); // Remove trailing slash
+    .replace(/\/$/, '') // Remove trailing slash
+    .replace(/^\//, ''); // Remove leading slash
 
 // PUBLIC_WORKING_DIR_ABSOLUTE properly concatenate PUBLIC_CONTENT_PATH_PREFIX and PUBLIC_CONTENT_DIR
 export const PUBLIC_WORKING_DIR_ABSOLUTE = processEnv.PUBLIC_WORKING_DIR_ABSOLUTE ||

@@ -48,6 +48,6 @@ export const globalSettings = singleton({
       label: 'CSS Head',
       description: 'Some CSS to be injected in the <head> of every page',
       multiline: true
-    }),
+    })
   }
 })

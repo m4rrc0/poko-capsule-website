@@ -12,13 +12,14 @@ import { globalSettings as globalSettingsSingleton } from './src/config-keystati
 import { languages } from './src/config-keystatic/content-types/languages.ts';
 import { pages } from './src/config-keystatic/content-types/pages.ts'
 import { articles } from './src/config-keystatic/content-types/articles.ts';
+import { uploads } from './src/config-keystatic/content-types/uploads.ts';
 
 const useArticles = globalSettings?.collections?.includes('articles') || false;
 
 // Storage
 const localMode: LocalConfig['storage'] = {
   kind: 'local',
-  pathPrefix: PUBLIC_CONTENT_PATH_PREFIX,
+  ...(PUBLIC_CONTENT_PATH_PREFIX ? { pathPrefix: PUBLIC_CONTENT_PATH_PREFIX } : {}),
 };
 
 const githubMode: GitHubConfig['storage'] = {
@@ -42,7 +43,7 @@ export default config({
       // },
     },
     navigation: {
-      'Settings': ['globalSettings', 'languages'],
+      'Settings': ['globalSettings', 'languages', 'uploads'],
       'Pages': ['pages'],
       ...(useArticles ? { 'Articles': ['articles'] } : {}),
       ...(userNavigation || {}),
@@ -56,6 +57,7 @@ export default config({
     languages,
     pages,
     articles,
+    uploads,
     ...(userCollections || {}),
   },
 });

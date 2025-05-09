@@ -7,6 +7,7 @@ import eleventyNavigationPlugin from "@11ty/eleventy-navigation";
 import { imageTransformOptions } from './src/config-11ty/plugins/imageTransform.js';
 import populateInputDir from './src/config-11ty/plugins/populateInputDir/index.js';
 import yamlData from './src/config-11ty/plugins/yamlData/index.js';
+import keystaticPassthroughFiles from './src/config-11ty/plugins/keystaticPassthroughFiles/index.js';
 // Local helper packages
 import { PUBLIC_WORKING_DIR, PUBLIC_WORKING_DIR_ABSOLUTE, PUBLIC_CONTENT_DIR, OUTPUT_DIR } from './config.env.js'
 import { div, callout, calloutShortcode } from './src/config-markdoc/tags-examples.js';
@@ -30,6 +31,7 @@ export const config = {
   dir: {
     // input: "src/templates",
     input: PUBLIC_WORKING_DIR, // this is probably '_content'
+    // input: PUBLIC_WORKING_DIR_ABSOLUTE,
     includes: "_includes",
     // data: "../src/data", // Directory for global data files. Default: "_data"
     // data: "/src/data", // Directory for global data files. Default: "_data"
@@ -70,6 +72,9 @@ export default async function (eleventyConfig) {
     // logLevel: 'debug',
     sources: ['src/content']
   });
+
+  // Retrieve public files from the _files directory
+  eleventyConfig.addPlugin(keystaticPassthroughFiles)
 
   // --------------------- Layouts
   eleventyConfig.addLayoutAlias("base", "layouts/base.html");

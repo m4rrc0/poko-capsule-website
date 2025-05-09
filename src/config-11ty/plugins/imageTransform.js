@@ -1,12 +1,16 @@
-import { OUTPUT_DIR } from "../../../config.env.js"
+import { OUTPUT_DIR, PUBLIC_WORKING_DIR } from "../../../config.env.js"
+
+// console.log({ PUBLIC_WORKING_DIR })
 
 export const imageTransformOptions = {
     // which file extensions to process
 	extensions: "html", // Default
 
     // Only optimize images when they are requested in the browser.
-		// transformOnRequest: false, // General default
+    // transformOnRequest: false, // General default
     // transformOnRequest: process.env.ELEVENTY_RUN_MODE === "serve" // (default for HTML Transform and WebC component)
+		// TODO: Need to deactivate this when InputDir is outside of the project root. Should investigate if this is recognized as a bug
+    ...(PUBLIC_WORKING_DIR.startsWith("../") ? { transformOnRequest: false } : {}),
 
     // Project-relative path to the output image directory
     // outputDir: "./img/", // (default)
