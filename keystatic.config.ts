@@ -1,3 +1,7 @@
+// TODO: At some point, I will want to mess with Keystatic's default behavior like this...
+// https://github.com/stefanprobst/astro-keystatic-tailwindcss ( from https://github.com/Thinkmill/keystatic/issues/1189#issuecomment-2320658999 )
+// https://github.com/Thinkmill/keystatic/issues/831
+
 import { config, type LocalConfig, type GitHubConfig } from '@keystatic/core';
 import {
   PUBLIC_CONTENT_PATH_PREFIX,
@@ -12,7 +16,7 @@ import { globalSettings as globalSettingsSingleton } from './src/config-keystati
 import { languages } from './src/config-keystatic/content-types/languages.ts';
 import { pages } from './src/config-keystatic/content-types/pages.ts'
 import { articles } from './src/config-keystatic/content-types/articles.ts';
-import { uploads } from './src/config-keystatic/content-types/uploads.ts';
+import { filesLibrary } from './src/config-keystatic/content-types/filesLibrary.ts';
 
 const useArticles = globalSettings?.collections?.includes('articles') || false;
 
@@ -43,7 +47,7 @@ export default config({
       // },
     },
     navigation: {
-      'Settings': ['globalSettings', 'languages', 'uploads'],
+      'Settings': ['globalSettings', 'languages', 'filesLibrary'],
       'Pages': ['pages'],
       ...(useArticles ? { 'Articles': ['articles'] } : {}),
       ...(userNavigation || {}),
@@ -55,9 +59,10 @@ export default config({
   },
   collections: {
     languages,
+    filesLibrary,
+    // Collections
     pages,
     articles,
-    uploads,
     ...(userCollections || {}),
   },
 });

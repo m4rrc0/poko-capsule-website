@@ -1,14 +1,14 @@
 import { fields, collection } from '@keystatic/core';
 import { PUBLIC_CONTENT_DIR } from '../variables.js';
-import { fileDirs } from '../common.js';
+// import { filesDir } from '../common.js';
 
 let filename = '';
 let extension = '';
 
-export const uploads = collection({
-  label: 'Uploads',
+export const filesLibrary = collection({
+  label: 'Files Library',
   slugField: 'filename',
-  path: `${PUBLIC_CONTENT_DIR}/_files/*/`,
+  path: `${PUBLIC_CONTENT_DIR}/_files/library/*/`,
   entryLayout: 'form', // or 'content'
   schema: {
     file: fields.file({
@@ -16,6 +16,7 @@ export const uploads = collection({
       // description: 'File to be uploaded',
       // ...fileDirs('uploads'),
       // publicPath: fileDirs('uploads').publicPath,
+      publicPath: `/assets/files/library/`,
       transformFilename: (originalFilename: string) => {
         const lastDotIndex = originalFilename.lastIndexOf('.');
         if (lastDotIndex !== -1) {
@@ -30,11 +31,7 @@ export const uploads = collection({
     }),
     filename: fields.slug({
       name: {
-        label: 'Upload Name',
-        defaultValue: filename,
-        validation: {
-          isRequired: true,
-        }
+        label: 'Label',
       },
       slug: {
         label: 'File Name',

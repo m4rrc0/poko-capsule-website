@@ -1,4 +1,5 @@
 // Plugins
+import { extname } from "path";
 import directoryOutputPlugin from "@11ty/eleventy-plugin-directory-output";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import pluginWebc from "@11ty/eleventy-plugin-webc";
@@ -73,8 +74,33 @@ export default async function (eleventyConfig) {
     sources: ['src/content']
   });
 
+  // Copy files
   // Retrieve public files from the _files directory
-  eleventyConfig.addPlugin(keystaticPassthroughFiles)
+  // eleventyConfig.addPlugin(keystaticPassthroughFiles)
+	eleventyConfig.addPassthroughCopy(
+    { [`${PUBLIC_WORKING_DIR}/_files`]: "assets/files" },
+    {
+      // debug: true,
+      filter: [
+        '**/*',
+        '!**/index.yaml'
+      ],
+      rename: function(filePath) {
+        // Only modify the file name when in the 'library' sub-folder
+        if (!filePath.startsWith('library/')) {
+          return filePath;
+        }
+        // Skip modification if the file is not called 'file.ext'
+        if (!/\/file\./.test(filePath)) {
+          return filePath;
+        }
+        const extension = extname(filePath);
+        const regex = new RegExp(`(${extension})?\/file${extension}$`);
+        const destFilePath = filePath.replace(regex, extension);
+        return destFilePath;
+      },
+    }
+  );
 
   // --------------------- Layouts
   eleventyConfig.addLayoutAlias("base", "layouts/base.html");

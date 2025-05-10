@@ -12,14 +12,14 @@ import yaml from 'js-yaml';
  * 11ty plugin to copy files defined in keystatic yaml files to the output directory
  * @param {Object} eleventyConfig - The 11ty config object
  * @param {Object} pluginOptions - Plugin options
- * @param {string} [pluginOptions.inputGlob='_files/**\/index.yaml'] - Input glob pattern for YAML files (relative to input)
- * @param {string} [pluginOptions.outputDir='assets/files'] - Output directory for files (relative to output) 
+ * @param {string} [pluginOptions.inputGlob='_files/library/**\/index.yaml'] - Input glob pattern for YAML files (relative to input)
+ * @param {string} [pluginOptions.outputDir='assets/files/library'] - Output directory for files (relative to output) 
  */
 export default async function(eleventyConfig, pluginOptions = {}) {
   // Set defaults for plugin options
   const options = {
-    inputGlob: '_files/**/index.yaml',
-    outputDir: 'assets/files',
+    inputGlob: '_files/library/**/index.yaml',
+    outputDir: 'assets/files/library',
     ...pluginOptions
   };
   

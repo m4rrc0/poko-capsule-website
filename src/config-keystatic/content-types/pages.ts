@@ -1,8 +1,9 @@
 import { fields, collection } from '@keystatic/core';
-import { wrapper } from '@keystatic/core/content-components'
+import { wrapper, mark } from '@keystatic/core/content-components'
 // export const markdocConfig = fields.markdoc.createMarkdocConfig({});
 import { PUBLIC_CONTENT_DIR } from '../variables.js';
 import { imageDirs } from '../common.js';
+import { Link } from '../content-components/link.tsx';
 
 export const prose = fields.markdoc({
   label: 'Prose',
@@ -12,6 +13,7 @@ export const prose = fields.markdoc({
     },
   },
   components: {
+    Link,
     callout: wrapper({
       label: 'Callout',
       schema: {
