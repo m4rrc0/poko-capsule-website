@@ -11,10 +11,14 @@ const fallbackRepoName = fallbackRepoUrlParts?.pop();
 const fallbackRepoOwner = fallbackRepoUrlParts?.pop();
 const fallbackRepo = `${fallbackRepoOwner}/${fallbackRepoName}`;
 
+// DIRECTORIES
 // Output directory
 export const OUTPUT_DIR = processEnv.OUTPUT_DIR || 'dist';
 // Cache directory
 export const CACHE_DIR = processEnv.CACHE_DIR || 'node_modules/.astro';
+// Files output directory
+export const FILES_OUTPUT_DIR = processEnv.FILES_OUTPUT_DIR || 'assets/files';
+export const FILES_LIBRARY_OUTPUT_DIR = processEnv.FILES_LIBRARY_OUTPUT_DIR || `${FILES_OUTPUT_DIR}/library`;
 
 // PUBLIC_CONTENT_PATH_PREFIX
 export const PUBLIC_CONTENT_PATH_PREFIX = processEnv.PUBLIC_CONTENT_PATH_PREFIX || '';

@@ -1,5 +1,5 @@
 import { fields, collection } from '@keystatic/core';
-import { PUBLIC_CONTENT_DIR } from '../variables.js';
+import { PUBLIC_CONTENT_DIR, FILES_LIBRARY_OUTPUT_DIR } from '../variables.js';
 // import { filesDir } from '../common.js';
 
 let filename = '';
@@ -16,7 +16,7 @@ export const filesLibrary = collection({
       // description: 'File to be uploaded',
       // ...fileDirs('uploads'),
       // publicPath: fileDirs('uploads').publicPath,
-      publicPath: `/assets/files/library/`,
+      publicPath: `/${FILES_LIBRARY_OUTPUT_DIR}/`,
       transformFilename: (originalFilename: string) => {
         const lastDotIndex = originalFilename.lastIndexOf('.');
         if (lastDotIndex !== -1) {

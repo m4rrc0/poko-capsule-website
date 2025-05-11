@@ -1,5 +1,5 @@
 import Markdoc from "@markdoc/markdoc";
-import { markdocToRenderableTree, replaceChildrenInRenderableTree } from '../utils/html-in-mdoc.js';
+import { markdocToRenderableTree, replaceChildrenInRenderableTree } from '../../utils/html-in-mdoc.js';
 
 // TODO: Document: This is an implementation using a paired shortcode
 export const calloutShortcode = (content, { title }) => {

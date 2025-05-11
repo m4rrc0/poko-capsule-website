@@ -1,0 +1,1 @@
+<a class="Link" style="" :href="href" :target="target" :rel="rel"><slot></slot></a>

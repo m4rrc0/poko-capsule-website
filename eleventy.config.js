@@ -10,8 +10,9 @@ import populateInputDir from './src/config-11ty/plugins/populateInputDir/index.j
 import yamlData from './src/config-11ty/plugins/yamlData/index.js';
 import keystaticPassthroughFiles from './src/config-11ty/plugins/keystaticPassthroughFiles/index.js';
 // Local helper packages
-import { PUBLIC_WORKING_DIR, PUBLIC_WORKING_DIR_ABSOLUTE, PUBLIC_CONTENT_DIR, OUTPUT_DIR } from './config.env.js'
-import { div, callout, calloutShortcode } from './src/config-markdoc/tags-examples.js';
+import { PUBLIC_WORKING_DIR, PUBLIC_WORKING_DIR_ABSOLUTE, PUBLIC_CONTENT_DIR, OUTPUT_DIR, FILES_OUTPUT_DIR } from './config.env.js'
+import { div, callout, calloutShortcode } from './src/config-markdoc/tags/tags-examples.js';
+import { Link } from './src/config-markdoc/tags/index.js';
 import eleventyComputed from './src/data/eleventyComputed.js';
 
 // Eleventy Config
@@ -49,6 +50,7 @@ export default async function (eleventyConfig) {
   // --------------------- Base Config
   eleventyConfig.setQuietMode(true);
   eleventyConfig.addWatchTarget("./src/config-11ty/**/*", { resetConfig: true }); // NOTE: watching works but changes does not properly rerender...
+  eleventyConfig.addWatchTarget("./src/config-markdoc/**/*", { resetConfig: true }); // NOTE: watching works but changes does not properly rerender...
   // eleventyConfig.setUseGitIgnore(false);
 
   // --------------------- Plugins
@@ -64,7 +66,8 @@ export default async function (eleventyConfig) {
     transform: {
       tags: {
         div,
-        callout
+        callout,
+        Link
       }
     }
   });
@@ -78,12 +81,13 @@ export default async function (eleventyConfig) {
   // Retrieve public files from the _files directory
   // eleventyConfig.addPlugin(keystaticPassthroughFiles)
 	eleventyConfig.addPassthroughCopy(
-    { [`${PUBLIC_WORKING_DIR}/_files`]: "assets/files" },
+    { [`${PUBLIC_WORKING_DIR}/_files`]: FILES_OUTPUT_DIR },
     {
       // debug: true,
       filter: [
-        '**/*',
-        '!**/index.yaml'
+        '**/*.*', // WARNING: We won't preserve files without an extension
+        '!library/**', // NOTE: Needed because folder names in library might have a '.' so we exclude them explicitely
+        'library/**/file.*', // ... and only keep the 'file.ext' file
       ],
       rename: function(filePath) {
         // Only modify the file name when in the 'library' sub-folder
@@ -114,7 +118,7 @@ export default async function (eleventyConfig) {
   // --------------------- Filters
   eleventyConfig.addFilter("toIsoString", toISOString);
   eleventyConfig.addFilter("formatDate", formatDate);
-  eleventyConfig.addFilter("dateToString", dateToSlug);
+  eleventyConfig.addFilter("dateToSlug", dateToSlug);
   eleventyConfig.addFilter("slugifyPath", (input) =>
     slugifyPath(input, eleventyConfig),
   );

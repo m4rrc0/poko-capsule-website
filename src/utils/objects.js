@@ -1,0 +1,1 @@
+export const removeUndefinedProps = (obj) => Object.fromEntries(Object.entries(obj).filter(([_, v]) => v !== undefined));

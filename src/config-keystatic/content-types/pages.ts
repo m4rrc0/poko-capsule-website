@@ -11,6 +11,7 @@ export const prose = fields.markdoc({
     image: {
       ...imageDirs('pages')
     },
+    link: false,
   },
   components: {
     Link,
@@ -73,7 +74,7 @@ export const pages = collection({
       add: fields.checkbox({ label: 'Add to main navigation', defaultValue: false }),
       title: fields.text({ label: 'Title', description: 'Default: Page Name' }),
       parent: fields.relationship({ label: 'Parent Page', collection: 'pages', description: 'Empty means top level nav' }),
-      order: fields.number({ label: 'Order', description: 'Default: 0' }),
+      order: fields.number({ label: 'Order', description: 'Default: 0', defaultValue: 0 }),
     }, {
       label: 'Main Navigation',
       // description: 'Add this page to your main nav',

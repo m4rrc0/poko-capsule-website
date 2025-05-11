@@ -24,6 +24,31 @@ const LinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="34" height
 
 // TODO: Regex pattern validations
 
+const target = (defaultValue: string = 'none') => fields.select({
+  label: 'Target',
+  options: [
+    { label: 'None', value: 'none' },
+    { label: 'New Tab', value: '_blank' },
+    { label: 'Same Tab', value: '_self' },
+  ],
+  defaultValue,
+})
+
+const relValues = ['alternate', 'author', 'bookmark', 'external', 'help', 'license', 'next', 'nofollow', 'noreferrer', 'noopener', 'prev', 'search', 'tag']
+
+const rel = (defaultValue?: string) => fields.text({
+  label: 'rel',
+  description: 'Specifies the relationship between the current document and the linked document',
+  defaultValue,
+  validation: {
+    isRequired: false,
+    pattern: {
+      regex: new RegExp(`^((${relValues.join('|')})( (${relValues.join('|')}))*)?$`),
+      message: 'Space-separated values from: ' + relValues.join(', ')
+    }
+  },
+})
+
 export const Link = mark({
     label: 'Link',
     icon: <LinkLucide />,
@@ -52,36 +77,29 @@ export const Link = mark({
         }),
         // SCHEMAS FOR EACH OPTION
         {
-          internal: fields.conditional(
-            // CONDITIONAL SELECT
-            fields.select({
-              label: 'Collection',
-              // description: 'The type of link.',
-              options: collections.map(c => ({ label: c, value: c })),
-              defaultValue: 'pages',
-              validation: {
-                isRequired: true,
-              },
-            }),
-            // SCHEMAS FOR EACH OPTION
-            Object.fromEntries(collections.map(c => [c, fields.relationship({ label: c, collection: c, validation: { isRequired: true } })])),
-          ),
+          internal: fields.object({
+            link: fields.conditional(
+              // CONDITIONAL SELECT
+              fields.select({
+                label: 'Collection',
+                // description: 'The type of link.',
+                options: collections.map(c => ({ label: c, value: c })),
+                defaultValue: 'pages',
+                validation: {
+                  isRequired: true,
+                },
+              }),
+              // SCHEMAS FOR EACH OPTION
+              Object.fromEntries(collections.map(c => [c, fields.relationship({ label: c, collection: c, validation: { isRequired: true } })])),
+            ),
+            target: target(),
+            rel: rel(),
+          }),
           external: fields.object({
             url: fields.url({ label: 'URL', validation: { isRequired: true } }),
-            target: fields.select({
-              label: 'Target',
-              options: [
-                { label: 'New Tab', value: '_blank' },
-                { label: 'Same Tab', value: '_self' },
-              ],
-              defaultValue: '_blank',
-            }),
+            target: target('_blank'),
             hreflang: fields.text({ label: 'hreflang', description: 'Specifies the language of the linked document' }),
-            rel: fields.text({
-              label: 'rel',
-              description: 'Specifies the relationship between the current document and the linked document',
-              defaultValue: 'noopener noreferrer nofollow external',
-            }),
+            rel: rel('noopener noreferrer nofollow external'),
           }),
           file: fields.object({
             file: fields.conditional(
@@ -103,13 +121,10 @@ export const Link = mark({
                 external: fields.url({ label: 'URL', validation: { isRequired: true } }),
               }
             ),
+            target: target('_blank'),
             download: fields.checkbox({ label: 'Download', defaultValue: false, description: 'Download file when clicking on the link (instead of navigating to it)' }),
             hreflang: fields.text({ label: 'hreflang', description: 'Specifies the language of the linked document' }),
-            rel: fields.text({
-              label: 'rel',
-              description: 'Specifies the relationship between the current document and the linked document',
-              defaultValue: 'noopener noreferrer nofollow external',
-            }),
+            rel: rel(),
           }),
           email: fields.object({
             email: fields.text({ label: 'Email', multiline: false, validation: { isRequired: true } }),
@@ -118,7 +133,9 @@ export const Link = mark({
             bcc: fields.text({ label: 'BCC', multiline: false }),
             body: fields.text({ label: 'Body', multiline: true }),
           }),
-          phone: fields.text({ label: 'Phone', validation: { isRequired: true } }),
+          phone: fields.object({
+            phone: fields.text({ label: 'Phone', validation: { isRequired: true } })
+          }),
         }
       ),
     }

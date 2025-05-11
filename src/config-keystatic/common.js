@@ -9,5 +9,5 @@ export const imageDirs = (dir) => ({
 
 export const fileDirs = (dir) => ({
     directory: `${PUBLIC_WORKING_DIR}/_files/${dir}`,
-    publicPath: `/assets/${dir}/`,
+    publicPath: `/assets/files/${dir}/`,
 })

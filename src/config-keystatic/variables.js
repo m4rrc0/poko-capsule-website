@@ -12,6 +12,9 @@ export const PUBLIC_KEYSTATIC_STORAGE_LOCAL = (
   import.meta.env.PUBLIC_KEYSTATIC_STORAGE_LOCAL === 'true' ||
   (import.meta.env.PUBLIC_KEYSTATIC_STORAGE_LOCAL !== 'false' && (import.meta.env.DEV || false))
 );
+export const LOCAL_BUILD = import.meta.env.LOCAL_BUILD || false;
+export const FILES_OUTPUT_DIR = import.meta.env.FILES_OUTPUT_DIR || 'assets/files';
+export const FILES_LIBRARY_OUTPUT_DIR = import.meta.env.FILES_LIBRARY_OUTPUT_DIR || `${FILES_OUTPUT_DIR}/library`;
 
 // Retrieve User preferences
 // -------------------------
