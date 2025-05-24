@@ -1,0 +1,12 @@
+# Articles
+
+{% References
+    collection="articles"
+    wrapper={tag: "div", attrs: { class: "list"}}
+    child={tag: "div", attrs: { class: "list-item"}}
+%}
+
+{% a href=$item.page.url data-prop="test-class" %}{% $item.data.title %}{% /a %}
+
+{% /References %}
+

@@ -3,7 +3,7 @@ import { mark } from '@keystatic/core/content-components'
 import React from 'react'
 // import SuperscriptIcon from '@heroicons/react/24/outline/SuperscriptIcon'
 import { Link as LinkLucide } from "lucide-react";
-import { collections, fileDirs } from '../common.js';
+import { collections, collectionSelect, fileDirs } from '../common.js';
 
 const LinkIcon = () => <svg xmlns="http://www.w3.org/2000/svg" width="34" height="32" viewBox="0 0 34 32" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
   <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
@@ -80,15 +80,7 @@ export const Link = mark({
           internal: fields.object({
             link: fields.conditional(
               // CONDITIONAL SELECT
-              fields.select({
-                label: 'Collection',
-                // description: 'The type of link.',
-                options: collections.map(c => ({ label: c, value: c })),
-                defaultValue: 'pages',
-                validation: {
-                  isRequired: true,
-                },
-              }),
+              collectionSelect,
               // SCHEMAS FOR EACH OPTION
               Object.fromEntries(collections.map(c => [c, fields.relationship({ label: c, collection: c, validation: { isRequired: true } })])),
             ),

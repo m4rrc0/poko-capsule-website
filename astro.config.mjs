@@ -9,7 +9,21 @@ import netlify from "@astrojs/netlify";
 import vercel from "@astrojs/vercel";
 import node from '@astrojs/node';
 import { consoleInfo, readFirstExistingFile } from './src/utils/build.js';
-import { PUBLIC_CONTENT_PATH_PREFIX, PUBLIC_CONTENT_DIR, PUBLIC_WORKING_DIR, PUBLIC_WORKING_DIR_ABSOLUTE, FILES_OUTPUT_DIR, FILES_LIBRARY_OUTPUT_DIR, LOCAL_BUILD, PREFERRED_HOSTING, NETLIFY_BUILD, CLOUDFLARE_BUILD, VERCEL_BUILD, INTERNAL_SYMLINK_PATH } from "./config.env.js";
+import {
+  PUBLIC_CONTENT_PATH_PREFIX,
+  PUBLIC_CONTENT_DIR,
+  PUBLIC_WORKING_DIR,
+  PUBLIC_WORKING_DIR_ABSOLUTE,
+  FILES_OUTPUT_DIR,
+  FILES_LIBRARY_OUTPUT_DIR,
+  GLOBAL_PARTIALS_PREFIX,
+  LOCAL_BUILD,
+  PREFERRED_HOSTING,
+  NETLIFY_BUILD,
+  CLOUDFLARE_BUILD,
+  VERCEL_BUILD,
+  INTERNAL_SYMLINK_PATH,
+} from "./config.env.js";
 
 const cloudflareOptions = {
   platformProxy: { enabled: true, configPath: 'wrangler.jsonc', experimentalJsonConfig: true }
@@ -107,6 +121,7 @@ const viteConfig = {
     'import.meta.env.INTERNAL_SYMLINK_PATH': JSON.stringify(INTERNAL_SYMLINK_PATH),
     'import.meta.env.FILES_OUTPUT_DIR': JSON.stringify(FILES_OUTPUT_DIR),
     'import.meta.env.FILES_LIBRARY_OUTPUT_DIR': JSON.stringify(FILES_LIBRARY_OUTPUT_DIR),
+    'import.meta.env.GLOBAL_PARTIALS_PREFIX': GLOBAL_PARTIALS_PREFIX,
   },
   resolve: {
     alias: {

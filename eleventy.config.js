@@ -1,6 +1,8 @@
 // Plugins
-import { extname } from "path";
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import directoryOutputPlugin from "@11ty/eleventy-plugin-directory-output";
+import { IdAttributePlugin } from "@11ty/eleventy";
 import { eleventyImageTransformPlugin } from "@11ty/eleventy-img";
 import pluginWebc from "@11ty/eleventy-plugin-webc";
 import pluginMarkdoc from "@m4rrc0/eleventy-plugin-markdoc";
@@ -8,12 +10,21 @@ import eleventyNavigationPlugin from "@11ty/eleventy-navigation";
 import { imageTransformOptions } from './src/config-11ty/plugins/imageTransform.js';
 import populateInputDir from './src/config-11ty/plugins/populateInputDir/index.js';
 import yamlData from './src/config-11ty/plugins/yamlData/index.js';
+import autoCollections from './src/config-11ty/plugins/auto-collections/index.js';
 import keystaticPassthroughFiles from './src/config-11ty/plugins/keystaticPassthroughFiles/index.js';
 // Local helper packages
-import { PUBLIC_WORKING_DIR, PUBLIC_WORKING_DIR_ABSOLUTE, PUBLIC_CONTENT_DIR, OUTPUT_DIR, FILES_OUTPUT_DIR } from './config.env.js'
-import { div, callout, calloutShortcode } from './src/config-markdoc/tags/tags-examples.js';
-import { Link } from './src/config-markdoc/tags/index.js';
+import {
+  PUBLIC_WORKING_DIR,
+  PUBLIC_WORKING_DIR_ABSOLUTE,
+  PUBLIC_CONTENT_DIR,
+  PUBLIC_PARTIALS_DIR,
+  PUBLIC_LAYOUTS_DIR,
+  OUTPUT_DIR,
+  FILES_OUTPUT_DIR,
+  GLOBAL_PARTIALS_PREFIX } from './config.env.js'
+import * as markdocTags from './src/config-markdoc/tags/index.js';
 import eleventyComputed from './src/data/eleventyComputed.js';
+import Markdoc from '@markdoc/markdoc';
 
 // Eleventy Config
 import {
@@ -34,7 +45,8 @@ export const config = {
     // input: "src/templates",
     input: PUBLIC_WORKING_DIR, // this is probably '_content'
     // input: PUBLIC_WORKING_DIR_ABSOLUTE,
-    includes: "_includes",
+    includes: PUBLIC_PARTIALS_DIR, // this is probably '_partials'
+    layouts: PUBLIC_LAYOUTS_DIR, // this is probably '_layouts'
     // data: "../src/data", // Directory for global data files. Default: "_data"
     // data: "/src/data", // Directory for global data files. Default: "_data"
     // output: "public",
@@ -49,27 +61,22 @@ export const config = {
 export default async function (eleventyConfig) {
   // --------------------- Base Config
   eleventyConfig.setQuietMode(true);
-  eleventyConfig.addWatchTarget("./src/config-11ty/**/*", { resetConfig: true }); // NOTE: watching works but changes does not properly rerender...
+  eleventyConfig.addWatchTarget("./src/config-11ty/**/*", { resetConfig: true });
   eleventyConfig.addWatchTarget("./src/config-markdoc/**/*", { resetConfig: true }); // NOTE: watching works but changes does not properly rerender...
   // eleventyConfig.setUseGitIgnore(false);
 
-  // --------------------- Plugins
-  eleventyConfig.addPlugin(directoryOutputPlugin);
+  // --------------------- Plugins Early
+  // eleventyConfig.addPlugin(directoryOutputPlugin);
+  eleventyConfig.addPlugin(IdAttributePlugin, {
+		selector: "h1,h2,h3,h4,h5,h6,.id-attr", // default: "h1,h2,h3,h4,h5,h6"
+	});
 	eleventyConfig.addPlugin(eleventyNavigationPlugin);
 	eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageTransformOptions);
   eleventyConfig.addPlugin(yamlData);
+  eleventyConfig.addPlugin(autoCollections);
 	eleventyConfig.addPlugin(pluginWebc, {
     components: "src/components/**/*.webc",
     useTransform: true,
-  });
-  eleventyConfig.addPlugin(pluginMarkdoc, {
-    transform: {
-      tags: {
-        div,
-        callout,
-        Link
-      }
-    }
   });
   // Populate Default Content
   await eleventyConfig.addPlugin(populateInputDir, {
@@ -79,35 +86,10 @@ export default async function (eleventyConfig) {
 
   // Copy files
   // Retrieve public files from the _files directory
-  // eleventyConfig.addPlugin(keystaticPassthroughFiles)
-	eleventyConfig.addPassthroughCopy(
-    { [`${PUBLIC_WORKING_DIR}/_files`]: FILES_OUTPUT_DIR },
-    {
-      // debug: true,
-      filter: [
-        '**/*.*', // WARNING: We won't preserve files without an extension
-        '!library/**', // NOTE: Needed because folder names in library might have a '.' so we exclude them explicitely
-        'library/**/file.*', // ... and only keep the 'file.ext' file
-      ],
-      rename: function(filePath) {
-        // Only modify the file name when in the 'library' sub-folder
-        if (!filePath.startsWith('library/')) {
-          return filePath;
-        }
-        // Skip modification if the file is not called 'file.ext'
-        if (!/\/file\./.test(filePath)) {
-          return filePath;
-        }
-        const extension = extname(filePath);
-        const regex = new RegExp(`(${extension})?\/file${extension}$`);
-        const destFilePath = filePath.replace(regex, extension);
-        return destFilePath;
-      },
-    }
-  );
+  eleventyConfig.addPlugin(keystaticPassthroughFiles)
 
   // --------------------- Layouts
-  eleventyConfig.addLayoutAlias("base", "layouts/base.html");
+  eleventyConfig.addLayoutAlias("base", "base.html");
 
   // --------------------- Global Data
   eleventyConfig.addGlobalData("layout", "base");
@@ -125,4 +107,28 @@ export default async function (eleventyConfig) {
 
   // --------------------- Shortcodes
   // eleventyConfig.addPairedShortcode("calloutShortcode", calloutShortcode);
+
+  // --------------------- Plugins Late
+  await eleventyConfig.addPlugin(pluginMarkdoc, {
+    deferTags: ['References'],
+    usePartials: [
+      {
+        cwd: "src/config-markdoc/partials",
+        patterns: ["**/*.mdoc"],
+        ...(GLOBAL_PARTIALS_PREFIX && { pathPrefix: GLOBAL_PARTIALS_PREFIX })
+        // pathPrefix: "global", // Files will appear as "global/filename.mdoc"
+        // debug: true,
+      },
+      {
+        cwd: path.join(config.dir.input, config.dir.includes),
+        patterns: ["**/*.{mdoc,md,html,webc}"],
+        // pathPrefix: "partials", // Files will appear as "partials/filename.mdoc"
+        // debug: true,
+      },
+    ],
+    transform: {
+      tags: { ...markdocTags }
+    },
+    // debug: true,
+  });
 }

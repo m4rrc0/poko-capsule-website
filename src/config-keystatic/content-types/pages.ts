@@ -1,39 +1,7 @@
 import { fields, collection } from '@keystatic/core';
-import { wrapper, mark } from '@keystatic/core/content-components'
-// export const markdocConfig = fields.markdoc.createMarkdocConfig({});
 import { PUBLIC_CONTENT_DIR } from '../variables.js';
 import { imageDirs } from '../common.js';
-import { Link } from '../content-components/link.tsx';
-
-export const prose = fields.markdoc({
-  label: 'Prose',
-  options: {
-    image: {
-      ...imageDirs('pages')
-    },
-    link: false,
-  },
-  components: {
-    Link,
-    callout: wrapper({
-      label: 'Callout',
-      schema: {
-        title: fields.text({
-          label: 'Title',
-          validation: {
-            isRequired: true,
-          },
-        }),
-        message: fields.text({
-          label: 'Message',
-          // validation: {
-          //   isRequired: true,
-          // },
-        }),
-      }
-    })
-  }
-})
+import { prose } from '../prose.js';
 
 export const pages = collection({
   label: 'Pages',
@@ -69,7 +37,7 @@ export const pages = collection({
         },
       }
     }),
-    prose,
+    prose: prose({ image: imageDirs('pages') }),
     eleventyNavigation: fields.object({
       add: fields.checkbox({ label: 'Add to main navigation', defaultValue: false }),
       title: fields.text({ label: 'Title', description: 'Default: Page Name' }),

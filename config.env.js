@@ -1,5 +1,5 @@
 import 'dotenv/config'
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 import packageJson from './package.json' with { type: "json" };
 
 const processEnv = typeof process !== 'undefined' ? process.env : {};
@@ -19,17 +19,17 @@ export const CACHE_DIR = processEnv.CACHE_DIR || 'node_modules/.astro';
 // Files output directory
 export const FILES_OUTPUT_DIR = processEnv.FILES_OUTPUT_DIR || 'assets/files';
 export const FILES_LIBRARY_OUTPUT_DIR = processEnv.FILES_LIBRARY_OUTPUT_DIR || `${FILES_OUTPUT_DIR}/library`;
+export const GLOBAL_PARTIALS_PREFIX = typeof processEnv.GLOBAL_PARTIALS_PREFIX === 'string' ? processEnv.GLOBAL_PARTIALS_PREFIX : 'global';
 
 // PUBLIC_CONTENT_PATH_PREFIX
 export const PUBLIC_CONTENT_PATH_PREFIX = processEnv.PUBLIC_CONTENT_PATH_PREFIX || '';
 // PUBLIC_CONTENT_DIR
 export const PUBLIC_CONTENT_DIR = processEnv.PUBLIC_CONTENT_DIR || '_content';
+export const PUBLIC_PARTIALS_DIR = processEnv.PUBLIC_PARTIALS_DIR || '_partials';
+export const PUBLIC_LAYOUTS_DIR = processEnv.PUBLIC_LAYOUTS_DIR || '_layouts';
 // PUBLIC_WORKING_DIR merges relative paths from PUBLIC_CONTENT_PATH_PREFIX and PUBLIC_CONTENT_DIR
 export const PUBLIC_WORKING_DIR = (processEnv.PUBLIC_WORKING_DIR ||
-  (PUBLIC_CONTENT_PATH_PREFIX + '/' + PUBLIC_CONTENT_DIR))
-    .replace(/\/+/g, '/') // Replace multiple slashes with single slash
-    .replace(/\/$/, '') // Remove trailing slash
-    .replace(/^\//, ''); // Remove leading slash
+  join(PUBLIC_CONTENT_PATH_PREFIX, PUBLIC_CONTENT_DIR))
 
 // PUBLIC_WORKING_DIR_ABSOLUTE properly concatenate PUBLIC_CONTENT_PATH_PREFIX and PUBLIC_CONTENT_DIR
 export const PUBLIC_WORKING_DIR_ABSOLUTE = processEnv.PUBLIC_WORKING_DIR_ABSOLUTE ||

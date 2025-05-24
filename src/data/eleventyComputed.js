@@ -3,16 +3,32 @@ import { PUBLIC_USER_DIR } from '../../config.env.js';
 // import temp from './temp.js';
 import mapInputPathToUrl from '../utils/mapInputPathToUrl.js';
 
-// function mapInputPathToUrl(filePathStem) {
-//     return filePathStem
-//         .replace(/^\/pages/, '')
-//         .replace(new RegExp(`^\/${PUBLIC_USER_DIR}`), '')
-//         .replace(/\/index$/, '') + '/index'
+// const autoTagNameDico = {
+//     pages: 'page',
+//     articles: 'article',
+//     people: 'person',
+//     organizations: 'organization'
 // }
 
 export default {
     // ...temp,
     lang: (data) => data.lang || data.globalSettings?.lang || 'en',
+    h1Content: data => {
+        const {rawInput} = data.page
+        
+        if (!rawInput) return '';
+        
+        // Try to match h1 tag content - works for HTML and some template formats
+        const h1Match = rawInput.match(/<h1[^>]*>(.*?)<\/h1>/i);
+        if (h1Match && h1Match[1]) return h1Match[1].trim();
+        
+        // Try to match markdown # heading
+        const mdMatch = rawInput.match(/^\s*#\s+(.+?)\s*$/m);
+        if (mdMatch && mdMatch[1]) return mdMatch[1].trim();
+        
+        return '';
+    },
+    title: (data) => data.title || data.name || data.h1Content,
     permalink: (data) => {
         // console.log({tags: data.tags})
         if (typeof data.permalink === 'boolean' && !data.permalink) {
@@ -47,7 +63,7 @@ export default {
         }
         return {
             key: data.page.fileSlug,
-            title: data.eleventyNavigation?.title || data.name,
+            title: data.eleventyNavigation?.title || data.title,
             parent: data.eleventyNavigation?.parent,
             order: data.eleventyNavigation?.order,
         }
@@ -61,7 +77,7 @@ export default {
     metadata: (data) => {
         const siteName = data.globalSettings?.siteName || '';
         return {
-            title: (data.metadata?.title || data.name || data.title) + (siteName ? ` | ${siteName}` : ''),
+            title: [(data.metadata?.title || data.title), siteName].filter(Boolean).join(' | '),
             description: data.metadata?.description ?? '',
             image: data.metadata?.image ?? '',
         }

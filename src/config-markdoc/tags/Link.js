@@ -38,7 +38,7 @@ function transformInternalLink(value) {
   const href = url.href;
 
 
-  return { href, target, rel, class: 'Link internal' + (className ? ' ' + className : '') }
+  return { href, target, rel, class: 'link internal' + (className ? ' ' + className : '') }
 }
 
 function transformExternalLink(value) {
@@ -50,7 +50,7 @@ function transformExternalLink(value) {
     class: className,
   } = value || {}
   
-  return { href: url, target, hreflang, rel, class: 'Link external' + (className ? ' ' + className : '') }
+  return { href: url, target, hreflang, rel, class: 'link external' + (className ? ' ' + className : '') }
 }
 
 function transformFileLink(value) {
@@ -72,13 +72,13 @@ function transformFileLink(value) {
   switch (discriminant) {
     case 'filesLibrary':
       href = `/${FILES_LIBRARY_OUTPUT_DIR}/${href}`;
-      className = 'Link file internal library' + (className ? ' ' + className : '')
+      className = 'link file internal library' + (className ? ' ' + className : '')
       break;
     case 'local':
-      className = 'Link file internal local' + (className ? ' ' + className : '')
+      className = 'link file internal local' + (className ? ' ' + className : '')
       break;
     case 'external':
-      className = 'Link file external' + (className ? ' ' + className : '')
+      className = 'link file external' + (className ? ' ' + className : '')
       break;
     default:
       href = '';
@@ -123,7 +123,7 @@ function transformEmailLink(value) {
   
   const queryString = params.join('&');
   
-  return { href: `mailto:${email}?${queryString}`, target, hreflang, rel, class: 'Link email' + (className ? ' ' + className : '') }
+  return { href: `mailto:${email}?${queryString}`, target, hreflang, rel, class: 'link email' + (className ? ' ' + className : '') }
 }
 
 function transformPhoneLink(value) {
@@ -137,10 +137,12 @@ function transformPhoneLink(value) {
   
   const href = phone ? `tel:${phone}` : phone
   
-  return { href, target, hreflang, rel, class: 'Link phone' + (className ? ' ' + className : '') }
+  return { href, target, hreflang, rel, class: 'link phone' + (className ? ' ' + className : '') }
 }
 
 export const Link = {
+  inline: true,
+  selfClosing: false,
     // render: 'link-c',
     // attributes: {
     //     type: {

@@ -12,11 +12,14 @@ import {
   userCollections,
   userNavigation,
 } from './src/config-keystatic/variables.js';
+// Globals settings
 import { globalSettings as globalSettingsSingleton } from './src/config-keystatic/content-types/globalSettings.ts';
 import { languages } from './src/config-keystatic/content-types/languages.ts';
+import { filesLibrary } from './src/config-keystatic/content-types/filesLibrary.ts';
+import { partials } from './src/config-keystatic/content-types/partials.ts'
+// Collections
 import { pages } from './src/config-keystatic/content-types/pages.ts'
 import { articles } from './src/config-keystatic/content-types/articles.ts';
-import { filesLibrary } from './src/config-keystatic/content-types/filesLibrary.ts';
 
 const useArticles = globalSettings?.collections?.includes('articles') || false;
 
@@ -42,14 +45,16 @@ export default config({
       //   let path = colorScheme === 'dark'
       //     ? '//your-brand.com/path/to/dark-logo.png'
       //     : '//your-brand.com/path/to/light-logo.png';
-        
+
       //   return <img src={path} height={24} />
       // },
     },
     navigation: {
-      'Settings': ['globalSettings', 'languages', 'filesLibrary'],
-      'Pages': ['pages'],
-      ...(useArticles ? { 'Articles': ['articles'] } : {}),
+      'Settings': ['globalSettings', 'languages', 'filesLibrary', 'partials'],
+      'Collections': [
+        'pages',
+        ...(useArticles ? ['articles'] : []),
+      ],
       ...(userNavigation || {}),
     },
   },
@@ -60,6 +65,7 @@ export default config({
   collections: {
     languages,
     filesLibrary,
+    partials,
     // Collections
     pages,
     articles,
