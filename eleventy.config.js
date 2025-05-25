@@ -33,6 +33,11 @@ import {
   formatDate,
   dateToSlug,
   slugifyPath,
+  filterCollection,
+  join,
+  first,
+  last,
+  randomFilter,
 } from "./src/config-11ty/filters/index.js";
 
 // TODOS:
@@ -100,12 +105,20 @@ export default async function (eleventyConfig) {
   eleventyConfig.addGlobalData("eleventyComputed", eleventyComputed);
 
   // --------------------- Filters
-  eleventyConfig.addFilter("toIsoString", toISOString);
-  eleventyConfig.addFilter("formatDate", formatDate);
-  eleventyConfig.addFilter("dateToSlug", dateToSlug);
+  // Slug
   eleventyConfig.addFilter("slugifyPath", (input) =>
     slugifyPath(input, eleventyConfig),
   );
+  // Date
+  eleventyConfig.addFilter("toIsoString", toISOString);
+  eleventyConfig.addFilter("formatDate", formatDate);
+  eleventyConfig.addFilter("dateToSlug", dateToSlug);
+  // Array
+  eleventyConfig.addFilter("filterCollection", filterCollection);
+  eleventyConfig.addFilter("join", join);
+  eleventyConfig.addFilter("first", first);
+  eleventyConfig.addFilter("last", last);
+  eleventyConfig.addFilter("randomFilter", randomFilter);
 
   // --------------------- Shortcodes
   // eleventyConfig.addPairedShortcode("calloutShortcode", calloutShortcode);

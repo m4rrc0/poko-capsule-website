@@ -6,7 +6,7 @@ name: Collection - Unordered List
 
 {% html-tag name="ul" %}
     {% For $collection %}
-        {% html-tag name="li" %}{% html-tag name="a" attrs={ href: $i.page.url } %}{% $i.data.title %}{% /html-tag %}{% /html-tag %}
+        {% html-tag name="li" %} {% dateToSlug($i.date) %} ({% join($i.data.tags) %}) {% html-tag name="a" attrs={ href: $i.page.url } %}{% $i.data.title %}{% /html-tag %}{% /html-tag %}
     {% /For %}
 {% /html-tag %}
 

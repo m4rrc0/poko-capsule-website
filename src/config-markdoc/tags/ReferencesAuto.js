@@ -7,7 +7,7 @@ import {
   formatPartialFileName,
   retrievePartial,
 } from './_utils.js';
-
+import { filterCollection } from '../../utils/arrays.js';
 
 export const ReferencesAuto = {
   inline: false,
@@ -21,19 +21,30 @@ export const ReferencesAuto = {
   transform: (node, config) => {
     const {
       collection: collectionName,
+      filter,
       partial: { discriminant, value },
       variables: varArray,
     } = node.attributes
+    // Constants
     const className = `references list auto ${collectionName}`
     const childClassName = `references item auto ${collectionName}`
+
+    // Format filters
+    const filters = filter.map(f => {
+      const by = f.by.discriminant;
+      const value = f.by.value;
+      return { by, value }
+    })
+
     const collection = config.variables?.collections[collectionName] || []
+    const filteredCollection = filterCollection(collection, filters);
     const file = formatPartialFileName(discriminant, value);
     const partial = retrievePartial(config, file);
 
     if (!partial) {
       // TODO: Decide if we should keep this as a fallback
       // Implementation without Partial just in case...?
-      const children = collection.map(item => {
+      const children = filteredCollection.map(item => {
         return new Markdoc.Tag("li", {}, [new Markdoc.Tag("a", {
           href: item.page.url,
         }, item.data.title)])
@@ -51,7 +62,7 @@ export const ReferencesAuto = {
       variables: {
         ...config.variables,
         ...variables,
-        collection,
+        collection: filteredCollection,
       },
     };
 

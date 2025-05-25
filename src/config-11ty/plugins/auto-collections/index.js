@@ -37,7 +37,7 @@ export default async function(eleventyConfig, pluginOptions) {
 
 	for (const [key, value] of Object.entries(autoTagNameDico)) {
 		eleventyConfig.addCollection(key, function (collectionsApi) {
-			return collectionsApi.getAll().filter(function (item) {
+			return collectionsApi.getAllSorted().reverse().filter(function (item) {
 				const tags = item.data.tags || [];
 				const fileMainDir = item.page.filePathStem
 					.replace(/^\/+/, '') // Remove leading slashes
@@ -47,7 +47,7 @@ export default async function(eleventyConfig, pluginOptions) {
 			});
 		});
 		eleventyConfig.addCollection(value, function (collectionsApi) {
-			return collectionsApi.getAll().filter(function (item) {
+			return collectionsApi.getAllSorted().reverse().filter(function (item) {
 				const tags = item.data.tags || [];
 				const fileMainDir = item.page.filePathStem
 					.replace(/^\/+/, '') // Remove leading slashes
