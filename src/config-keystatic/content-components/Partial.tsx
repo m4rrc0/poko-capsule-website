@@ -3,19 +3,7 @@ import { block } from '@keystatic/core/content-components'
 import React from 'react'
 // import SuperscriptIcon from '@heroicons/react/24/outline/SuperscriptIcon'
 import { ArrowRight as IconLucide } from "lucide-react";
-import { GLOBAL_PARTIALS_PREFIX } from '../variables.js';
-// import { collectionSelect } from '../common.js';
-
-// Possible ways to reference entries
-// -
-
-// Globally defined partials
-// NOTE: No need to apply the prefix here. It is applied in the Partial Tag when discriminant == 'global'
-const globalPartialSelectOptions = [
-    { label: 'None', value: 'none.mdoc' },
-    { label: 'simple-list-item.mdoc', value: 'simple-list-item.mdoc' },
-    { label: 'simple-link.mdoc', value: 'simple-link.mdoc' },
-]
+import { partialSelect } from '../common.js';
 
 export const Partial = block({
     label: 'Partial',
@@ -29,35 +17,7 @@ export const Partial = block({
     // },
     // className: "align-super text-xs",
     schema: {
-        // file: fields.text({
-        //   label: 'Partial File Name',
-        //   validation: {
-        //     isRequired: true,
-        //   },
-        // }),
-        file: fields.conditional(
-          // First, define a `select` field with all the available "conditions"
-          fields.select({
-            label: 'Partial File',
-            options: [
-              { label: 'Global Source', value: 'global' },
-              { label: 'Personal library', value: 'personal' },
-              { label: 'Custom file name', value: 'custom' },
-            ],
-            defaultValue: 'global',
-          }),
-          // Then, provide a schema for each condition
-          {
-            global: fields.select({
-              options: globalPartialSelectOptions,
-              defaultValue: globalPartialSelectOptions[0].value,
-            }),
-            personal: fields.relationship({
-              collection: 'partials'
-            }),
-            custom: fields.text({}),
-          }
-        ),
+        file: partialSelect,
         variables: fields.array(
           fields.object({
             key: fields.text({ label: 'Key' }),

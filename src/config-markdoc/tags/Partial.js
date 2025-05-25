@@ -1,28 +1,9 @@
-const transformFileName = (discriminant, value) => {
-  let file = value.endsWith('.mdoc') ? value : `${value}.mdoc`;
-  file = discriminant === 'global' ? `global/${file}` : file;
-  return file;
-}
-
-class PartialFile {
-  validate(fileRaw, config) {
-    const { discriminant, value } = fileRaw;
-    const file = transformFileName(discriminant, value);
-    const { partials = {} } = config;
-    const partial = partials[file];
-
-    if (!partial)
-      return [
-        {
-          id: 'attribute-value-invalid',
-          level: 'error',
-          message: `Partial \`${file}\` not found. The 'file' attribute must be set in \`config.partials\``,
-        },
-      ];
-
-    return [];
-  }
-}
+import {
+  varArrayToObj,
+  PartialFile,
+  formatPartialFileName,
+  retrievePartial,
+} from './_utils.js';
 
 export const Partial = {
   inline: false,
@@ -33,20 +14,13 @@ export const Partial = {
     variables: { type: Array, render: false, default: [] }
   },
   transform(node, config) {
-    const { partials = {} } = config;
     const { file: { discriminant, value }, variables: varArray } = node.attributes;
-    const file = transformFileName(discriminant, value);
-    const partial = partials[file];
-
-    // console.log({ file })
-    // console.log({ partials })
+    const file = formatPartialFileName(discriminant, value);
+    const partial = retrievePartial(config, file);
 
     if (!partial) return null;
 
-    const variables = (varArray || []).reduce((acc, { key, value }) => {
-      acc[key] = value;
-      return acc;
-    }, {});
+    const variables = varArrayToObj(varArray);
 
     const scopedConfig = {
       ...config,

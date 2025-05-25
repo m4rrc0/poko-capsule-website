@@ -1,5 +1,6 @@
 import { resolve, dirname } from 'path';
 import yaml from 'js-yaml';
+import fglob from 'fast-glob';
 import { defineConfig } from 'astro/config';
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
@@ -75,6 +76,17 @@ try {
   consoleInfo(`Error loading global settings: ${e.message}`);
 }
 
+// Retrieve global partials
+let globalPartials;
+try {
+  globalPartials = await fglob('**/*.mdoc', {
+    cwd: 'src/config-markdoc/partials',
+    // objectMode: true
+  });
+} catch (e) {
+  consoleInfo(`Error loading global partials: ${e.message}`);
+}
+
 /** @type {import('vite').UserConfig} */
 const viteConfig = {
   // TODO: need to find a way to include files that are excluded by .gitignore
@@ -113,7 +125,8 @@ const viteConfig = {
     'import.meta.env.NETLIFY_BUILD': JSON.stringify(NETLIFY_BUILD),
     'import.meta.env.CLOUDFLARE_BUILD': JSON.stringify(CLOUDFLARE_BUILD),
     'import.meta.env.VERCEL_BUILD': JSON.stringify(VERCEL_BUILD),
-    'import.meta.env.PUBLIC_GLOBAL_SETTINGS': JSON.stringify(globalSettings || {}),
+    'import.meta.env.GLOBAL_SETTINGS': JSON.stringify(globalSettings || {}),
+    'import.meta.env.GLOBAL_PARTIALS': JSON.stringify(globalPartials || []),
     // Content preferences
     'import.meta.env.PUBLIC_CONTENT_PATH_PREFIX': JSON.stringify(PUBLIC_CONTENT_PATH_PREFIX),
     'import.meta.env.PUBLIC_CONTENT_DIR': JSON.stringify(PUBLIC_CONTENT_DIR),
@@ -121,7 +134,7 @@ const viteConfig = {
     'import.meta.env.INTERNAL_SYMLINK_PATH': JSON.stringify(INTERNAL_SYMLINK_PATH),
     'import.meta.env.FILES_OUTPUT_DIR': JSON.stringify(FILES_OUTPUT_DIR),
     'import.meta.env.FILES_LIBRARY_OUTPUT_DIR': JSON.stringify(FILES_LIBRARY_OUTPUT_DIR),
-    'import.meta.env.GLOBAL_PARTIALS_PREFIX': GLOBAL_PARTIALS_PREFIX,
+    'import.meta.env.GLOBAL_PARTIALS_PREFIX': JSON.stringify(GLOBAL_PARTIALS_PREFIX),
   },
   resolve: {
     alias: {

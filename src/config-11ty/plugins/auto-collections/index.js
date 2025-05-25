@@ -25,9 +25,9 @@ export const tags = (data) => {
 		] : []),
 	]
 	// console.log({data})
-	const tags = [...(data.tags || []), ...autoTags]
+	const tagsList = [...(data.tags || []), ...autoTags]
 	// remove duplicates
-	const uniqueTags = [...new Set(tags)];
+	const uniqueTags = [...new Set(tagsList)];
 	
 	return uniqueTags;
 }

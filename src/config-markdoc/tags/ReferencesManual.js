@@ -1,19 +1,11 @@
 import Markdoc from "@markdoc/markdoc";
 import { sort } from 'fast-sort';
-import { ensureKeyValObject, getNestedValue } from "../../utils/objects.js";  
+import { ensureKeyValObject } from "../../utils/objects.js";
+import { replaceVariablesInKeyValObject } from "./_utils.js";
 
-const replaceVariablesInKeyValObject = (obj, variables) => {
-  Object.entries(obj).forEach(([key, value]) => {
-    if (typeof value === 'string' && /\$/.test(value)) {
-      // TODO: We should handle partial matches (e.g. "URL: $page.url")
-      obj[key] = getNestedValue(variables, value.replace('$', '')) || value
-    }
-  })
-}
-export const References = {
+export const ReferencesManual = {
   inline: false,
   selfClosing: false,
-  // render: 'link-c',
   attributes: {
     collection: { type: String, required: true },
     wrapper: {type: Object, default: {tag: "ul"}},
@@ -35,10 +27,10 @@ export const References = {
     // console.log(sortedCollection.map(u => u.data.date))
     const attrs = ensureKeyValObject(wrapper.attrs)
     replaceVariablesInKeyValObject(attrs, config.variables)
-    const className = 'references list'
-    const childClassName = 'item'
-    
-    // console.log({ 
+    const className = `references list manual ${collectionName}`
+    const childClassName = `references item manual ${collectionName}`
+
+    // console.log({
     //   wrapper,
     //   child,
     //   attrs
@@ -60,7 +52,7 @@ export const References = {
         class: `${childClassName} ${childAttrs.class || ''}`,
       }, scopedChildren)
     })
-    
+
     return new Markdoc.Tag(wrapper.tag || "ul", {
       ...attrs,
       class: `${className} ${attrs.class || ''}`

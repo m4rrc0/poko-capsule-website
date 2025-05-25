@@ -112,6 +112,7 @@
     "concurrently": "^9.1.2",
     "dayjs": "^1.11.13",
     "dotenv": "^16.4.7",
+    "fast-glob": "^3.3.3",
     "fast-sort": "^3.4.1",
     "glob": "^11.0.1",
     "js-yaml": "^4.1.0",

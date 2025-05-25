@@ -23,6 +23,7 @@ import {
   FILES_OUTPUT_DIR,
   GLOBAL_PARTIALS_PREFIX } from './config.env.js'
 import * as markdocTags from './src/config-markdoc/tags/index.js';
+import * as markdocNodes from './src/config-markdoc/nodes/index.js';
 import eleventyComputed from './src/data/eleventyComputed.js';
 import Markdoc from '@markdoc/markdoc';
 
@@ -74,10 +75,11 @@ export default async function (eleventyConfig) {
 	eleventyConfig.addPlugin(eleventyImageTransformPlugin, imageTransformOptions);
   eleventyConfig.addPlugin(yamlData);
   eleventyConfig.addPlugin(autoCollections);
-	eleventyConfig.addPlugin(pluginWebc, {
-    components: "src/components/**/*.webc",
-    useTransform: true,
-  });
+  // TODO: reinstate this if 11ty Transform proves to be stable
+	// eleventyConfig.addPlugin(pluginWebc, {
+  //   components: "src/components/**/*.webc",
+  //   useTransform: true,
+  // });
   // Populate Default Content
   await eleventyConfig.addPlugin(populateInputDir, {
     // logLevel: 'debug',
@@ -110,7 +112,7 @@ export default async function (eleventyConfig) {
 
   // --------------------- Plugins Late
   await eleventyConfig.addPlugin(pluginMarkdoc, {
-    deferTags: ['References'],
+    deferTags: ['ReferencesManual', 'For'],
     usePartials: [
       {
         cwd: "src/config-markdoc/partials",
@@ -127,7 +129,9 @@ export default async function (eleventyConfig) {
       },
     ],
     transform: {
-      tags: { ...markdocTags }
+      tags: { ...markdocTags },
+      // TODO: Try providing a custom img node for eleventy-img to avoid needing the transform?
+      nodes: { ...markdocNodes },
     },
     // debug: true,
   });

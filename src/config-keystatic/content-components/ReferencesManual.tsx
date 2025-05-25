@@ -6,10 +6,10 @@ import { ArrowRight as IconLucide } from "lucide-react";
 import { collectionSelect } from '../common.js';
 
 // Possible ways to reference entries
-// - 
+// -
 
-export const References = wrapper({
-    label: 'References',
+export const ReferencesManual = wrapper({
+    label: 'References (Manual)',
     icon: <IconLucide />,
     // tag?: "span" | "strong" | "em" | "u" | "del" | "code" | "a" | "sub" | "sup" | "kbd" | "abbr" | "wrapper" | "s" | "small" | "big",
     // tag: "span",

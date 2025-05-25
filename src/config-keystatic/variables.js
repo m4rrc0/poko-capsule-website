@@ -20,11 +20,12 @@ export const LOCAL_BUILD = import.meta.env.LOCAL_BUILD || false;
 export const FILES_OUTPUT_DIR = import.meta.env.FILES_OUTPUT_DIR || 'assets/files';
 export const FILES_LIBRARY_OUTPUT_DIR = import.meta.env.FILES_LIBRARY_OUTPUT_DIR || `${FILES_OUTPUT_DIR}/library`;
 export const GLOBAL_PARTIALS_PREFIX = typeof import.meta.env.GLOBAL_PARTIALS_PREFIX === 'string' ? import.meta.env.GLOBAL_PARTIALS_PREFIX : 'global';
+export const globalPartials = import.meta.env.GLOBAL_PARTIALS || [];
 
 // Retrieve User preferences
 // -------------------------
 // Global Settings
-const globalSettingsEnv = import.meta.env.PUBLIC_GLOBAL_SETTINGS;
+const globalSettingsEnv = import.meta.env.GLOBAL_SETTINGS;
 export const globalSettings = typeof globalSettingsEnv === 'string' ? JSON.parse(globalSettingsEnv) : globalSettingsEnv || {};
 
 let userConfig = {}

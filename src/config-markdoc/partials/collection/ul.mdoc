@@ -1,0 +1,17 @@
+---
+name: Collection - Unordered List
+---
+
+{% if $collection %}
+
+{% html-tag name="ul" %}
+    {% For $collection %}
+        {% html-tag name="li" %}{% html-tag name="a" attrs={ href: $i.page.url } %}{% $i.data.title %}{% /html-tag %}{% /html-tag %}
+    {% /For %}
+{% /html-tag %}
+
+{% else /%}
+
+{% html-tag name="p" %}No collection found{% /html-tag %}
+
+{% /if %}
