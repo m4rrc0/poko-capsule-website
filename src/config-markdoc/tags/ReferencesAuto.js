@@ -1,27 +1,29 @@
 import Markdoc from "@markdoc/markdoc";
-import { sort } from 'fast-sort';
-import { ensureKeyValObject, getNestedValue } from "../../utils/objects.js";
 import {
   varArrayToObj,
   PartialFile,
   formatPartialFileName,
   retrievePartial,
 } from './_utils.js';
-import { filterCollection } from '../../utils/arrays.js';
+import { filterCollection, sortCollection } from '../../utils/arrays.js';
 
 export const ReferencesAuto = {
   inline: false,
   selfClosing: false,
   attributes: {
-    collection: { type: String, required: true },
+    references: { type: Object, required: true },
+    // collection: { type: String, required: true },
     // TODO: Understand why this does not pass validation
     partial: { type: PartialFile, render: false, required: true },
     variables: { type: Array, render: false, default: [] }
   },
   transform: (node, config) => {
     const {
-      collection: collectionName,
-      filter,
+      references: {
+        collection: collectionName,
+        sort,
+        filter,
+      } = {},
       partial: { discriminant, value },
       variables: varArray,
     } = node.attributes
@@ -29,6 +31,12 @@ export const ReferencesAuto = {
     const className = `references list auto ${collectionName}`
     const childClassName = `references item auto ${collectionName}`
 
+    // Format sort criterias
+    const sortCriterias = sort.map(s => {
+      const direction = s.direction;
+      const by = s.by.discriminant === 'custom' ? s.by.value : s.by.discriminant;
+      return { direction, by }
+    })
     // Format filters
     const filters = filter.map(f => {
       const by = f.by.discriminant;
@@ -37,7 +45,8 @@ export const ReferencesAuto = {
     })
 
     const collection = config.variables?.collections[collectionName] || []
-    const filteredCollection = filterCollection(collection, filters);
+    const sortedCollection = sortCollection(collection, sortCriterias);
+    const filteredCollection = filterCollection(sortedCollection, filters);
     const file = formatPartialFileName(discriminant, value);
     const partial = retrievePartial(config, file);
 

@@ -82,4 +82,6 @@ export default {
             image: data.metadata?.image ?? '',
         }
     },
+    date: (data) => data.page?.date,
+    url: (data) => data.page?.url,
 };

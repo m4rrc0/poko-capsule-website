@@ -1,3 +1,6 @@
+import { sort } from 'fast-sort';
+import { tryMatchNestedVariable } from './objects.js';
+
 export const filterCollection = (collection, filtersRaw) => {
     const toInt = (value) => isNaN(parseInt(value)) ? 1 : parseInt(value);
     const toArrayOfStrings = (value) => {
@@ -28,9 +31,17 @@ export const filterCollection = (collection, filtersRaw) => {
     }, collection);
 
     return filteredCollection;
+}
 
+const sortCb = (collectionItem, by) => tryMatchNestedVariable(collectionItem, by)
 
+export const sortCollection = (collection, sortCriteriasRaw) => {
+    const sortCriterias = Array.isArray(sortCriteriasRaw) ? sortCriteriasRaw : [sortCriteriasRaw];
 
-  
-  
+    const sortedCollection = sort(collection)
+        .by(sortCriterias.map(({ direction, by }) => ({
+            [direction]: (collectionItem) => sortCb(collectionItem, by)
+        })));
+
+    return sortedCollection;
 }

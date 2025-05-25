@@ -1,7 +1,7 @@
 import Markdoc from "@markdoc/markdoc";
-import { getNestedValue } from "../../utils/objects.js";
+import { getNestedValue, tryMatchNestedVariable } from "../../utils/objects.js";
 
-const globalKeys = ['item', ['item', 'data'], ['item', 'page'], '', 'page', 'globalSettings' ]
+// const globalKeys = ['item', ['item', 'data'], ['item', 'page'], '', 'page', 'globalSettings' ]
 
 export const Variable = {
     // render: 'link-c',
@@ -14,19 +14,21 @@ export const Variable = {
         const className = 'Variable'
         let style = ''
 
-        let i = 0;
-        let value = undefined;
-        // Try and match more specific selectors first, then bare one, then globals
-        while (!value && i < globalKeys.length) {
-          if (Array.isArray(globalKeys[i])) {
-            value = getNestedValue(config.variables?.[globalKeys[i][0]]?.[globalKeys[i][1]], key);
-          } else if (!globalKeys[i]) {
-            value = getNestedValue(config.variables, key);
-          } else {
-            value = getNestedValue(config.variables?.[globalKeys[i]], key);
-          }
-          i++;
-        }
+        // let i = 0;
+        // let value = undefined;
+        // // Try and match more specific selectors first, then bare one, then globals
+        // while (!value && i < globalKeys.length) {
+        //   if (Array.isArray(globalKeys[i])) {
+        //     value = getNestedValue(config.variables?.[globalKeys[i][0]]?.[globalKeys[i][1]], key);
+        //   } else if (!globalKeys[i]) {
+        //     value = getNestedValue(config.variables, key);
+        //   } else {
+        //     value = getNestedValue(config.variables?.[globalKeys[i]], key);
+        //   }
+        //   i++;
+        // }
+
+        const value = tryMatchNestedVariable(config.variables, key);
 
         if (!value) {
             value = `⚠️ ${key} (not found)`;

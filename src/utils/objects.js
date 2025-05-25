@@ -6,5 +6,28 @@ export const ensureKeyValObject = (objOrArr) => Array.isArray(objOrArr)
   : (objOrArr || {})
 
 // Get nested value from object by digging through it on every reduce step
-export const getNestedValue = (obj, path, defaultValue = undefined) =>
-  path.split('.').reduce((acc, key) => (acc?.[key] ?? defaultValue), obj)
+// export const getNestedValue = (obj, path, defaultValue = undefined) =>
+//   path.split('.').reduce((acc, key) => (acc?.[key] ?? defaultValue), obj)
+
+// NOTE: More robust version of getNestedValue, also handling paths like 'a.b[2].c'
+export const getNestedValue = (obj, path, defaultValue = undefined) => {
+  const travel = regexp =>
+    String.prototype.split
+      .call(path, regexp)
+      .filter(Boolean)
+      .reduce((res, key) => (res !== null && res !== undefined ? res[key] : res), obj);
+  const result = travel(/[,[\]]+?/) || travel(/[,[\].]+?/);
+  return result === undefined || result === obj ? defaultValue : result;
+};
+
+// Try and match more specific selectors first, then bare one, then globals
+export const trialPathsConst = ['item', 'item.data', 'item.page', 'item.data.page', '', 'data', 'page', 'data.page', 'globalSettings', 'data.globalSettings']
+
+export const tryMatchNestedVariable = (deepObj, path, trialPaths = trialPathsConst) => {
+  let value = undefined;
+  for (const tp of trialPaths) {
+    if (value !== undefined) break;
+    value = getNestedValue(deepObj, `${tp ? tp + '.' : ''}${path}`);
+  }
+  return value;
+}
